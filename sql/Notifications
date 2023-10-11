@@ -1,0 +1,65 @@
+
+DROP TYPE IF EXISTS notification_type CASCADE;
+DROP TABLE IF EXISTS notifications CASCADE;
+
+
+
+CREATE TYPE notification type as ENUM('friend_request', 'friend_accept', 'message_from_chatwave');
+
+
+CREATE TABLE notifications (
+    id serial PRIMARY KEY,
+    profile_id integer REFERENCES profiles(id) ON DELETE CASCADE,
+    notification_type notification_type,
+    notification_data jsonb,
+    read boolean DEFAULT false,
+    created_at timestamp with time zone DEFAULT now()
+);
+
+
+
+ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
+
+
+CREATE POLICY notifications_insert_policy ON notifications
+FOR insert with check(auth.uid() = profile_id);
+
+CREATE POLICY notifications_select_policy ON notifications
+FOR select using (auth.uid() = profile_id);
+
+
+
+
+CREATE OR REPLACE FUNCTION fn_notify_friend_request()
+RETURNS trigger AS $$
+
+BEGIN
+    INSERT INTO notifications (profile_id, notification_type, notification_data)
+    VALUES (NEW.profile_id, 'friend_request', jsonb_build_object('profile_id', NEW.profile_id, 'friend_id', NEW.friend_id));
+
+    RETURN NEW;
+END;
+
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tg_notify_friend_request
+after insert on friends for each row
+execute procedure fn_notify_friend_request();
+
+
+
+CREATE OR REPLACE FUNCTION fn_notify_friend_accept()
+RETURNS trigger AS $$
+BEGIN
+    INSERT INTO notifications (profile_id, notification_type, notification_data)
+    VALUES (NEW.profile_id, 'friend_accept', jsonb_build_object('profile_id', NEW.profile_id, 'friend_id', NEW.friend_id));
+    RETURN NEW;
+END;
+
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tg_notify_friend_accept
+after update on friends for each row
+when (NEW.status = 'accepted')
+execute procedure fn_notify_friend_accept();
+

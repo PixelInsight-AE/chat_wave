@@ -1,0 +1,36 @@
+DROP TYPE IF EXISTS room_type CASCADE;
+DROP TABLE IF EXISTS rooms CASCADE;
+
+
+CREATE TYPE room_type AS ENUM('public', 'private');
+CREATE TABLE rooms (
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    owner uuid REFERENCES profiles(id) ON DELETE CASCADE,
+    name text NOT NULL,
+    description text,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now(),
+    private boolean DEFAULT false,
+    room_password text DEFAULT null,
+    room_type room_type DEFAULT 'public',
+    capacity integer DEFAULT 10,
+    CONSTRAINT room_name_unique UNIQUE (name),
+    CONSTRAINT max_capactiy CHECK (capacity <= 30)
+);
+
+
+ALTER TABLE rooms 
+  enable row level security;
+
+CREATE POLICY room_create_policy ON rooms
+  for insert with check (auth.uid() = owner);
+
+CREATE POLICY room_update_policy ON rooms
+  for update to owner using (auth.uid() = owner);
+
+CREATE POLICY room_delete_policy ON rooms
+  for delete to owner using (auth.uid() = owner);
+
+CREATE POLICY room_select_policy ON rooms
+  for select using (true);
+

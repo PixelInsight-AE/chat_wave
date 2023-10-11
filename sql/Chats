@@ -1,0 +1,21 @@
+DROP TABLE IF EXISTS chats CASCADE;
+
+CREATE TABLE chats (
+  user_1 uuid REFERENCES profiles(id) ON DELETE CASCADE,
+  user_2 uuid REFERENCES profiles(id) ON DELETE CASCADE,
+  created_at timestamp with time zone DEFAULT now(),
+  read boolean DEFAULT false,
+
+  PRIMARY KEY (user_1, user_2)
+);
+
+ALTER TABLE chats ENABLE ROW LEVEL SECURITY;
+
+
+CREATE POLICY chats_insert_policy ON chats
+FOR insert with check(auth.uid() = user_1 or auth.uid() = user_2);
+
+CREATE POLICY chats_select_policy ON chats
+FOR select using (auth.uid() = user_1 or auth.uid() = user_2);
+
+

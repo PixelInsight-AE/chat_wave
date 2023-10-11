@@ -1,0 +1,16 @@
+DROP TABLE IF EXISTS favorites CASCADE;
+
+CREATE TABLE favorites(
+    id serial PRIMARY KEY,
+    profile_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
+    room_id uuid REFERENCES rooms(id) ON DELETE CASCADE,
+    created_at timestamp with time zone DEFAULT now()
+)
+
+ALTER TABLE favorites ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY favorites_insert_policy ON favorites
+FOR insert with check(auth.uid() = profile_id);
+
+CREATE POLICY favorites_select_policy ON favorites
+FOR select using (auth.uid() = profile_id);

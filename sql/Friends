@@ -1,0 +1,30 @@
+DROP TYPE IF EXISTS friend_status CASCADE;
+DROP TABLE IF EXISTS friends CASCADE;
+
+
+
+
+CREATE TYPE friend_status AS ENUM('pending', 'accepted', 'blocked');
+
+CREATE TABLE friends( 
+    profile_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
+    friend_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
+    created_at timestamp with time zone DEFAULT now(),
+    status friend_status DEFAULT 'pending'
+
+    PRIMARY KEY (profile_id, friend_id)
+);
+
+ALTER TABLE friends ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY friends_insert_policy ON friends
+FOR insert with check(auth.uid() = profile_id or auth.uid() = friend_id);
+
+CREATE POLICY friends_update_policy ON friends
+FOR update on friends using (auth.uid() = profile_id or auth.uid() = friend_id);
+
+CREATE POLICY friends_delete_policy ON friends
+FOR delete on friends using (auth.uid() = profile_id or auth.uid() = friend_id);
+
+CREATE POLICY friends_select_policy ON friends
+FOR select using (auth.uid() = profile_id or auth.uid() = friend_id);

@@ -1,0 +1,213 @@
+
+-- DROP SCHEMA for start fresh
+DROP TABLE IF EXISTS profiles CASCADE;
+DROP TABLE IF EXISTS rooms CASCADE;
+DROP TABLE IF EXISTS converations CASCADE;
+DROP TABLE IF EXISTS chats CASCADE;
+DROP TABLE IF EXISTS friends CASCADE;
+DROP TABLE IF EXISTS notifications CASCADE;
+DROP TABLE IF EXISTS favorites CASCADE;
+
+
+-- DROP TYPE
+DROP TYPE IF EXISTS notification_type CASCADE;
+DROP TYPE IF EXISTS friend_status CASCADE;
+DROP TYPE IF EXISTS room_type CASCADE;
+
+-- types
+CREATE TYPE room_type AS ENUM('public', 'private');
+CREATE TYPE notification type as ENUM('friend_request', 'friend_accept', 'message_from_chatwave');
+CREATE TYPE friend_status AS ENUM('pending', 'accepted', 'blocked');
+
+
+-- extensions for avatr bucket
+insert into storage.buckets (id, name)
+  values ('avatars', 'avatars');
+
+-- tables
+CREATE TABLE profiles (
+  id uuid references auth.users on delete cascade not null primary key,
+  updated_at timestamp with time zone,
+  username text unique,
+  avatar_url text
+  constraint username_length check (char_length(username) >= 3)
+);
+CREATE TABLE rooms (
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    owner uuid REFERENCES profiles(id) ON DELETE CASCADE,
+    name text NOT NULL,
+    description text,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now(),
+    private boolean DEFAULT false,
+    room_password text DEFAULT null,
+    room_type room_type DEFAULT 'public',
+    capacity integer DEFAULT 10,
+    CONSTRAINT room_name_unique UNIQUE (name),
+    CONSTRAINT max_capactiy CHECK (capacity <= 30)
+);
+CREATE TABLE converations(
+    id serial PRIMARY KEY,
+    sender_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
+    receiver_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
+    message text NOT NULL,
+    read boolean DEFAULT false,
+    sent_at timestamp with time zone DEFAULT now(),
+);
+CREATE TABLE chats (
+  user_1 uuid REFERENCES profiles(id) ON DELETE CASCADE,
+  user_2 uuid REFERENCES profiles(id) ON DELETE CASCADE,
+  created_at timestamp with time zone DEFAULT now(),
+  read boolean DEFAULT false,
+
+  PRIMARY KEY (user_1, user_2)
+);
+CREATE TABLE friends( 
+    profile_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
+    friend_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
+    created_at timestamp with time zone DEFAULT now(),
+    status friend_status DEFAULT 'pending'
+
+    PRIMARY KEY (profile_id, friend_id)
+);
+CREATE TABLE notifications (
+    id serial PRIMARY KEY,
+    profile_id integer REFERENCES profiles(id) ON DELETE CASCADE,
+    notification_type notification_type,
+    notification_data jsonb,
+    read boolean DEFAULT false,
+    created_at timestamp with time zone DEFAULT now()
+);
+CREATE TABLE favorites(
+    id serial PRIMARY KEY,
+    profile_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
+    room_id uuid REFERENCES rooms(id) ON DELETE CASCADE,
+    created_at timestamp with time zone DEFAULT now()
+);
+
+
+
+-- row level security
+ALTER TABLE profiles enable row level security;
+ALTER TABLE rooms enable row level security;
+ALTER TABLE converations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE chats ENABLE ROW LEVEL SECURITY;
+ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE friends ENABLE ROW LEVEL SECURITY;
+ALTER TABLE favorites ENABLE ROW LEVEL SECURITY;
+
+
+
+
+-- policies
+create policy "Public profiles are viewable by everyone." on profiles
+  for select using (true);
+
+create policy "Users can insert their own profile." on profiles
+  for insert with check (auth.uid() = id);
+
+create policy "Users can update own profile." on profiles
+  for update using (auth.uid() = id);
+
+create policy "Avatar images are publicly accessible." on storage.objects
+  for select using (bucket_id = 'avatars');
+
+create policy "Anyone can upload an avatar." on storage.objects
+  for insert with check (bucket_id = 'avatars');
+
+CREATE POLICY room_create_policy ON rooms
+  for insert with check (auth.uid() = owner);
+
+CREATE POLICY room_update_policy ON rooms
+  for update to owner using (auth.uid() = owner);
+
+CREATE POLICY room_delete_policy ON rooms
+  for delete to owner using (auth.uid() = owner);
+
+CREATE POLICY room_select_policy ON rooms
+  for select using (true);
+
+
+CREATE POLICY converations_insert_policy ON converations
+FOR insert with check(auth.uid() = sender_id);
+
+CREATE POLICY converations_select_policy ON converations
+FOR select using (auth.uid() = sender_id or auth.uid() = receiver_id);
+
+
+CREATE POLICY chats_insert_policy ON chats
+FOR insert with check(auth.uid() = user_1 or auth.uid() = user_2);
+
+CREATE POLICY chats_select_policy ON chats
+FOR select using (auth.uid() = user_1 or auth.uid() = user_2);
+
+CREATE POLICY friends_insert_policy ON friends
+FOR insert with check(auth.uid() = profile_id or auth.uid() = friend_id);
+
+CREATE POLICY friends_update_policy ON friends
+FOR update on friends using (auth.uid() = profile_id or auth.uid() = friend_id);
+
+CREATE POLICY friends_delete_policy ON friends
+FOR delete on friends using (auth.uid() = profile_id or auth.uid() = friend_id);
+
+CREATE POLICY friends_select_policy ON friends
+FOR select using (auth.uid() = profile_id or auth.uid() = friend_id);
+
+
+CREATE POLICY notifications_insert_policy ON notifications
+FOR insert with check(auth.uid() = profile_id);
+
+CREATE POLICY notifications_select_policy ON notifications
+FOR select using (auth.uid() = profile_id);
+
+
+
+
+-- triggers
+
+create function public.fn_handle_new_user()
+returns trigger as $$
+begin
+  insert into public.profiles (id, username)
+  values (new.id, new.raw_user_meta_data->>'username');
+  return new;
+end;
+$$ language plpgsql security definer;
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.fn_handle_new_user();
+
+
+CREATE OR REPLACE FUNCTION fn_notify_friend_request()
+RETURNS trigger AS $$
+
+BEGIN
+    INSERT INTO notifications (profile_id, notification_type, notification_data)
+    VALUES (NEW.profile_id, 'friend_request', jsonb_build_object('profile_id', NEW.profile_id, 'friend_id', NEW.friend_id));
+
+    RETURN NEW;
+END;
+
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tg_notify_friend_request
+after insert on friends for each row
+execute procedure fn_notify_friend_request();
+
+
+
+CREATE OR REPLACE FUNCTION fn_notify_friend_accept()
+RETURNS trigger AS $$
+BEGIN
+    INSERT INTO notifications (profile_id, notification_type, notification_data)
+    VALUES (NEW.profile_id, 'friend_accept', jsonb_build_object('profile_id', NEW.profile_id, 'friend_id', NEW.friend_id));
+    RETURN NEW;
+END;
+
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tg_notify_friend_accept
+after update on friends for each row
+when (NEW.status = 'accepted')
+execute procedure fn_notify_friend_accept();
+

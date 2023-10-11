@@ -4,14 +4,15 @@ import App from "./App.tsx";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
+import store from "./store/index.js";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <HelmetProvider>
-        {/* <Provider store={store}> */}
-        <App />
-        {/* </Provider> */}
+        <Provider store={store}>
+          <App />
+        </Provider>
       </HelmetProvider>
     </BrowserRouter>
   </React.StrictMode>
