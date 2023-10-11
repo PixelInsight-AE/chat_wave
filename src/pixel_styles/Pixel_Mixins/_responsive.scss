@@ -1,0 +1,159 @@
+// Responsive Padding Mixin
+// Sets padding based on provided map
+@mixin responsive-padding($paddings) {
+  @each $breakpoint, $padding in $paddings {
+    @if $breakpoint == "xs" {
+      padding: $padding;
+    } @else {
+      @media (min-width: map-get($breakpoints, $breakpoint)) {
+        padding: $padding;
+      }
+    }
+  }
+}
+
+// Responsive Margin Mixin
+// Sets margin based on provided map
+@mixin responsive-margin($margins) {
+  @each $breakpoint, $margin in $margins {
+    @if $breakpoint == "xs" {
+      margin: $margin;
+    } @else {
+      @media (min-width: map-get($breakpoints, $breakpoint)) {
+        margin: $margin;
+      }
+    }
+  }
+}
+
+// Responsive Font Size Mixin
+// Sets font size based on provided map
+@mixin responsive-font-size($font-sizes) {
+  @each $breakpoint, $font-size in $font-sizes {
+    @if $breakpoint == "xs" {
+      font-size: $font-size;
+    } @else {
+      @media (min-width: map-get($breakpoints, $breakpoint)) {
+        font-size: $font-size;
+      }
+    }
+  }
+}
+
+// Responsive Display Mixin
+// Sets display property based on provided map
+@mixin responsive-display($displays) {
+  @each $breakpoint, $display in $displays {
+    @if $breakpoint == "xs" {
+      display: $display;
+    } @else {
+      @media (min-width: map-get($breakpoints, $breakpoint)) {
+        display: $display;
+      }
+    }
+  }
+}
+
+// Responsive Width Mixin
+// Sets width based on provided map
+@mixin responsive-width($widths) {
+  @each $breakpoint, $width in $widths {
+    @if $breakpoint == "xs" {
+      width: $width;
+    } @else {
+      @media (min-width: map-get($breakpoints, $breakpoint)) {
+        width: $width;
+      }
+    }
+  }
+}
+
+// Responsive Height Mixin
+// Sets height based on provided map
+@mixin responsive-height($heights) {
+  @each $breakpoint, $height in $heights {
+    @if $breakpoint == "xs" {
+      height: $height;
+    } @else {
+      @media (min-width: map-get($breakpoints, $breakpoint)) {
+        height: $height;
+      }
+    }
+  }
+}
+
+// Responsive Flex Direction Mixin
+// Sets flex direction based on provided map
+@mixin responsive-flex-direction($directions) {
+  @each $breakpoint, $direction in $directions {
+    @if $breakpoint == "xs" {
+      flex-direction: $direction;
+    } @else {
+      @media (min-width: map-get($breakpoints, $breakpoint)) {
+        flex-direction: $direction;
+      }
+    }
+  }
+}
+
+// Responsive Grid Template Columns Mixin
+// Sets grid template columns based on provided map
+@mixin responsive-grid-template-columns($templates) {
+  @each $breakpoint, $template in $templates {
+    @if $breakpoint == "xs" {
+      grid-template-columns: $template;
+    } @else {
+      @media (min-width: map-get($breakpoints, $breakpoint)) {
+        grid-template-columns: $template;
+      }
+    }
+  }
+}
+
+// ! ORIGINAL
+@mixin font-size-responsive($font-sizes, $base-size: 1rem) {
+  @each $breakpoint, $size in $font-sizes {
+    @media (min-width: map-get($breakpoints, $breakpoint)) {
+      font-size: $size;
+    }
+  }
+  @if not map-has-key($font-sizes, "xs") {
+    font-size: $base-size;
+  }
+}
+
+// Responsive padding
+@mixin responsive-padding($padding) {
+  @each $breakpoint, $value in $padding {
+    @media (min-width: map-get($breakpoints, $breakpoint)) {
+      padding: $value;
+    }
+  }
+  @if not map-has-key($padding, "xs") {
+    padding: map-get($padding, "xs");
+  }
+}
+
+// Text alignment
+@mixin text-align-responsive($alignments) {
+  @each $breakpoint, $alignment in $alignments {
+    @media (min-width: map-get($breakpoints, $breakpoint)) {
+      text-align: $alignment;
+    }
+  }
+}
+
+// Responsive Size Mixin
+@mixin size-responsive($sizes) {
+  @each $breakpoint, $size in $sizes {
+    @if $breakpoint == "xs" {
+      width: map-get($size, "width");
+      height: map-get($size, "height");
+    } @else {
+      @media (min-width: map-get($breakpoints, $breakpoint)) {
+        width: map-get($size, "width");
+        height: map-get($size, "height");
+      }
+    }
+  }
+}

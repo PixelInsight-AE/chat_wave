@@ -1,0 +1,105 @@
+/*
+ * Mixin: background-image
+ * Sets the background-image, background-position, background-size, and background-repeat properties. 
+ * Also allows setting a fallback background-color. 
+ * Default values are 'center center', 'cover', and 'no-repeat' for position, size, and repeat respectively.
+ */
+@mixin background-image(
+  $image-url,
+  $position: center center,
+  $size: cover,
+  $repeat: no-repeat,
+  $fallback-color: null
+) {
+  background-color: $fallback-color;
+  background-image: url($image-url);
+  background-position: $position;
+  background-size: $size;
+  background-repeat: $repeat;
+}
+
+/*
+ * Mixin: background-overlay
+ * Sets a background overlay of a specified color and opacity.
+ * The overlay is a ::before pseudo-element with an rgba background-color.
+ * Default values for overlay color and opacity are 'black' and '0.5'.
+ */
+@mixin background-overlay($overlay-color: black, $overlay-opacity: 0.5) {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($overlay-color, $overlay-opacity);
+    z-index: 1;
+  }
+}
+
+/*
+ * Mixin: background-image-overlay
+ * Sets a background-image with an overlay of a specified color and opacity. 
+ * The overlay is a ::before pseudo-element with an rgba background-color.
+ * Default values for overlay color and opacity are 'black' and '0.5'.
+ */
+@mixin background-image-overlay(
+  $image-url,
+  $overlay-color: black,
+  $overlay-opacity: 0.5,
+  $repeat: no-repeat,
+  $position: center center,
+  $size: cover
+) {
+  background-image: url($image-url);
+  background-repeat: $repeat;
+  background-position: $position;
+  background-size: $size;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($overlay-color, $overlay-opacity);
+    z-index: map-get($z-indexes, "overlay");
+  }
+}
+
+/*
+ * Mixin: background-gradient
+ * Sets a linear or radial gradient background. 
+ * You can specify the type ('linear' or 'radial'), start-color, end-color, and direction or shape of the gradient.
+ * Default values are 'linear', '#ffffff', '#000000', and 'to bottom'.
+ */
+@mixin background-gradient(
+  $type: "linear",
+  $start-color: #ffffff,
+  $end-color: #000000,
+  $direction-or-shape: "to bottom",
+  $repeat: no-repeat,
+  $position: center center,
+  $size: cover
+) {
+  background: $start-color;
+  background-repeat: $repeat;
+  background-position: $position;
+  background-size: $size;
+
+  @if $type == "linear" {
+    background: linear-gradient($direction-or-shape, $start-color, $end-color);
+  } @else if $type == "radial" {
+    background: radial-gradient(
+      $direction-or-shape at center,
+      $start-color,
+      $end-color
+    );
+  } @else {
+    @warn "Invalid type for gradient: #{$type}. Please use 'linear' or 'radial'.";
+  }
+}

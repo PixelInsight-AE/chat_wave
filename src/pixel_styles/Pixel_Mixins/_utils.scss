@@ -1,0 +1,100 @@
+// Utility Mixin
+@mixin utility($class-name, $properties) {
+  .#{$class-name} {
+    @each $property, $value in $properties {
+      #{$property}: $value;
+    }
+  }
+}
+
+// Pseudo-class Effect Mixin
+@mixin pseudo-class-effect($pseudo-class, $effects) {
+  &#{$pseudo-class} {
+    @each $property, $value in $effects {
+      #{$property}: $value;
+    }
+  }
+}
+
+// hover mixin
+@mixin hover($effects) {
+  &:hover {
+    @each $property, $value in $effects {
+      #{$property}: $value;
+    }
+  }
+}
+
+// Breakpoint Mixin
+@mixin breakpoint($breakpoint) {
+  @media (max-width: $breakpoint) {
+    @content;
+  }
+}
+@mixin media-min($breakpoint) {
+  @media (min-width: map-get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}
+@mixin media-max($breakpoint) {
+  @media (max-width: map-get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}
+
+// ! SIZING
+@mixin size($width: auto, $height: auto) {
+  width: $width;
+  height: $height;
+}
+// Aspect Ratio Mixin
+@mixin aspect-ratio($width, $height) {
+  position: relative;
+  &:before {
+    content: '';
+    display: block;
+    padding-top: ($height / $width) * 100%;
+  }
+  > * {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}
+
+// ! Z-INDEX
+@mixin z-index($level: 'base') {
+  position: relative;
+  z-index: map-get($z-indexes, $level);
+}
+
+@mixin margin-x($margin: $base-margin) {
+  margin-left: $margin;
+  margin-right: $margin;
+}
+@mixin margin-y($margin: $base-margin) {
+  margin-top: $margin;
+  margin-bottom: $margin;
+}
+@mixin padding-x($padding: $base-padding) {
+  padding-left: $padding;
+  padding-right: $padding;
+}
+@mixin padding-y($padding: $base-padding) {
+  padding-top: $padding;
+  padding-bottom: $padding;
+}
+
+// Can be gud? or bad?
+@mixin padding-and-margin($padding: $base-padding, $margin: $base-margin) {
+  padding: $padding;
+  margin: $margin;
+}
+@mixin margin-and-padding($margin: $base-margin, $padding: $base-padding) {
+  padding: $padding;
+  margin: $margin;
+}
+
+// sticky footer

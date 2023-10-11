@@ -1,0 +1,27 @@
+.form {
+  @include form();
+}
+
+.form-label {
+  @include form-label();
+}
+
+.form-input {
+  @include form-input();
+
+  &:focus {
+    @include form-focus();
+  }
+
+  &.valid {
+    @include form-validation($valid-color: $color-success);
+  }
+
+  &.invalid {
+    @include form-validation($invalid-color: $color-error);
+  }
+}
+
+.form-control {
+  @include form-control();
+}

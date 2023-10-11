@@ -1,0 +1,36 @@
+$shadow-light: 0 1px 3px;
+$shadow-medium: 0 3px 6px;
+$shadow-heavy: 0 10px 20px;
+
+@mixin shadow($type, $color) {
+  @if $type == light {
+    box-shadow: $shadow-light rgba($color, 0.12), 0 1px 2px rgba($color, 0.24);
+  } @else if $type == medium {
+    box-shadow: $shadow-medium rgba($color, 0.16), 0 3px 6px rgba($color, 0.23);
+  } @else if $type == heavy {
+    box-shadow: $shadow-heavy rgba($color, 0.19), 0 6px 6px rgba($color, 0.23);
+  } @else {
+    @error "Invalid shadow type: #{$type}."; // Error message vite console
+  }
+}
+
+@mixin shadow-hover($type, $color) {
+  transition: ease-in-out 0.2s;
+  &:hover {
+    @include shadow($type, $color);
+  }
+}
+
+@mixin shadow-active($type, $color) {
+  transition: ease-in-out 0.2s;
+  &:active {
+    @include shadow($type, $color);
+  }
+}
+
+@mixin shadow-focus($type, $color) {
+  transition: ease-in-out 0.2s;
+  &:focus {
+    @include shadow($type, $color);
+  }
+}

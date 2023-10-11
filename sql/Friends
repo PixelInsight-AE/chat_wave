@@ -15,6 +15,8 @@ CREATE TABLE friends(
     PRIMARY KEY (profile_id, friend_id)
 );
 
+ALTER TABLE friends ADD CONSTRAINT unique_friend UNIQUE (profile_id, friend_id);
+
 ALTER TABLE friends ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY friends_insert_policy ON friends

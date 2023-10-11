@@ -1,0 +1,42 @@
+@import '../../../index.scss';
+
+@mixin fixed-top-left {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+@mixin center-position {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#backdrop-hook {
+  .backdrop {
+    @include size(100%, 100vh);
+    @include fixed-top-left;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 10;
+  }
+}
+
+#modal-hook {
+  .modal {
+    @include center-position;
+    z-index: 100;
+
+    @media (min-width: $breakpoint-md) {
+      max-width: 50%;
+    }
+  }
+}
+
+#modal {
+  button {
+    @include button($color-primary);
+    @include margin-y(1rem);
+    display: block;
+  }
+}

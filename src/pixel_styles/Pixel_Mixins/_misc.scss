@@ -1,0 +1,29 @@
+// Neon Text Mixin
+@mixin neon-text(
+  $color: $color-secondary,
+  $glow-color: $color-secondary,
+  $glow-size: 10px
+) {
+  color: $color;
+  text-shadow: 0 0 $glow-size $glow-color;
+}
+
+// Triangle Mixin
+// Creates a CSS triangle pointing in the specified direction with the specified size and color
+@mixin triangle($direction: "down", $size: 10px, $color: currentColor) {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: $size;
+  @if $direction == "up" or $direction == "top" {
+    border-color: transparent transparent $color transparent;
+  } @else if $direction == "down" or $direction == "bottom" {
+    border-color: $color transparent transparent transparent;
+  } @else if $direction == "left" {
+    border-color: transparent $color transparent transparent;
+  } @else if $direction == "right" {
+    border-color: transparent transparent transparent $color;
+  } @else {
+    @error "Invalid direction: #{$direction}. Expected 'up', 'down', 'left', or 'right'.";
+  }
+}

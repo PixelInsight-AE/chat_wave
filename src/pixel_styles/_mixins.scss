@@ -1,0 +1,148 @@
+// ? MEDIA QUERIES
+@mixin xs {
+  @media (min-width: 0) and (max-width: calc($breakpoint-xs - 1px)) {
+    @content;
+  }
+}
+
+@mixin sm {
+  @media (min-width: $breakpoint-xs) and (max-width: calc($breakpoint-sm - 1px)) {
+    @content;
+  }
+}
+
+@mixin md {
+  @media (min-width: $breakpoint-sm) and (max-width: calc($breakpoint-md - 1px)) {
+    @content;
+  }
+}
+
+@mixin lg {
+  @media (min-width: $breakpoint-md) and (max-width: calc($breakpoint-lg - 1px)) {
+    @content;
+  }
+}
+
+@mixin xl {
+  @media (min-width: $breakpoint-lg) and (max-width: calc($breakpoint-xl - 1px)) {
+    @content;
+  }
+}
+
+@mixin xxl {
+  @media (min-width: $breakpoint-xl) {
+    @content;
+  }
+}
+
+// ! Mobile first
+@mixin media-breakpoint-up($breakpoint) {
+  @if $breakpoint == xs {
+    @media (min-width: $breakpoint-xs) {
+      @content;
+    }
+  } @else if $breakpoint == sm {
+    @media (min-width: $breakpoint-sm) {
+      @content;
+    }
+  } @else if $breakpoint == md {
+    @media (min-width: $breakpoint-md) {
+      @content;
+    }
+  } @else if $breakpoint == lg {
+    @media (min-width: $breakpoint-lg) {
+      @content;
+    }
+  } @else if $breakpoint == xl {
+    @media (min-width: $breakpoint-xl) {
+      @content;
+    }
+  } @else if $breakpoint == xxl {
+    @media (min-width: $breakpoint-xxl) {
+      @content;
+    }
+  } @else {
+    @warn "Invalid breakpoint: #{$breakpoint}. Please use one of: xs, sm, md, lg, xl, xxl.";
+  }
+}
+
+// ! Desktop first
+@mixin media-breakpoint-down($breakpoint) {
+  @if $breakpoint == sm {
+    @media (max-width: calc($breakpoint-sm - 1px)) {
+      @content;
+    }
+  } @else if $breakpoint == md {
+    @media (max-width: calc($breakpoint-md - 1px)) {
+      @content;
+    }
+  } @else if $breakpoint == lg {
+    @media (max-width: calc($breakpoint-lg - 1px)) {
+      @content;
+    }
+  } @else if $breakpoint == xl {
+    @media (max-width: calc($breakpoint-xl - 1px)) {
+      @content;
+    }
+  } @else if $breakpoint == xxl {
+    @media (max-width: calc($breakpoint-xxl - 1px)) {
+      @content;
+    }
+  } @else {
+    @warn "Invalid breakpoint: #{$breakpoint}. Please use one of: sm, md, lg, xl, xxl.";
+  }
+}
+
+// ? DISPLAY
+@mixin flex($direction: row, $justify-content: flex-start, $align-items: flex-start, $align-content: stretch, $flex-wrap: nowrap) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify-content;
+  align-items: $align-items;
+  align-content: $align-content;
+  flex-wrap: $flex-wrap;
+}
+
+@mixin flex-item($flex-grow: 0, $flex-shrink: 1, $flex-basis: auto) {
+  flex-grow: $flex-grow;
+  flex-shrink: $flex-shrink;
+  flex-basis: $flex-basis;
+}
+
+// ! GRID
+@mixin grid($grid-template-columns: 1fr, $grid-template-rows: 1fr, $grid-gap: 0.75rem, $justify-items: stretch, $align-items: stretch, $justify-content: start, $align-content: start) {
+  display: grid;
+  grid-template-columns: $grid-template-columns;
+  grid-template-rows: $grid-template-rows;
+  grid-gap: $grid-gap;
+  justify-items: $justify-items;
+  align-items: $align-items;
+  justify-content: $justify-content;
+  align-content: $align-content;
+}
+
+// ! POSITIONING
+@mixin position($type: absolute, $top: 0, $right: 0, $bottom: 0, $left: 0) {
+  position: $type;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
+@mixin position-top-left($top: 0, $left: 0) {
+  position: absolute;
+  top: $top;
+  left: $left;
+}
+
+@mixin position-top-right($top: 0, $right: 0) {
+  position: absolute;
+  top: $top;
+  right: $right;
+}
+
+@mixin sticky-top($top: 0) {
+  position: sticky;
+  top: $top;
+}

@@ -1,0 +1,37 @@
+$color-shadow: rgba(0, 0, 0, 0.2);
+$color-shadow-light: rgba(0, 0, 0, 0.1);
+$color-shadow-dark: rgba(0, 0, 0, 0.3);
+
+$shadow-types: (
+  light: $color-shadow-light,
+  medium: $color-shadow,
+  heavy: $color-shadow-dark,
+);
+
+@each $type, $color in $shadow-types {
+  .shadow-#{$type} {
+    @include shadow($type, $color);
+  }
+
+  .shadow-#{$type}-hover {
+    &:hover {
+      @include shadow($type, $color);
+    }
+  }
+
+  .shadow-#{$type}-active {
+    &:active {
+      @include shadow($type, $color);
+    }
+  }
+
+  .shadow-#{$type}-focus {
+    &:focus {
+      @include shadow($type, $color);
+    }
+  }
+}
+
+.shadow {
+  @include shadow(medium, $color-shadow);
+}

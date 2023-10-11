@@ -1,0 +1,41 @@
+// ? Color functions
+@function contrast-color($color) {
+  $lightness: lightness($color);
+  @if $lightness > 50 {
+    @return darken($color, 50%);
+  } @else {
+    @return lighten($color, 50%);
+  }
+}
+@function shade($color, $percentage) {
+  @return mix(black, $color, $percentage);
+}
+@function tint($color, $percentage) {
+  @return mix(white, $color, $percentage);
+}
+@function saturated-darken($color) {
+  $new-color: saturate($color, 20%);
+  $new-color: darken($new-color, 20%);
+  @return $new-color;
+}
+@function sepia($color) {
+  $sepia-color: desaturate($color, 50%);
+  $sepia-color: adjust-hue($sepia-color, 20deg);
+  @return $sepia-color;
+}
+@function muted($color) {
+  $muted-color: desaturate($color, 30%);
+  $muted-color: lighten($muted-color, 10%);
+  @return $muted-color;
+}
+@function cold-tone($color) {
+  $cold-color: adjust-hue($color, -20deg);
+  @return $cold-color;
+}
+@function warm-tone($color) {
+  $warm-color: adjust-hue($color, 20deg);
+  @return $warm-color;
+}
+@function monochrome($color) {
+  @return grayscale($color);
+}

@@ -1,0 +1,40 @@
+// // ! Config needs to be imported first
+// @import "pixel_styles/config/_pixelstyles.config.scss";
+// @import "pixel_styles/config/_variables.scss";
+// @import "pixel_styles/config/_maps.scss";
+// @import "pixel_styles/_mixins.scss";
+
+// // ! Pixel Mixins
+// @import "pixel_styles/Pixel_Mixins/_utils.scss";
+// @import "pixel_styles/Pixel_Mixins/_typography.scss";
+// @import "pixel_styles/Pixel_Mixins/_backgrounds.scss";
+// @import "pixel_styles/Pixel_Mixins/_buttons.scss";
+// @import "pixel_styles/Pixel_Mixins/_forms.scss";
+// @import "pixel_styles/Pixel_Mixins/_colors.scss";
+// @import "pixel_styles/Pixel_Mixins/_borders.scss";
+// @import "pixel_styles/Pixel_Mixins/_shadows.scss";
+// @import "pixel_styles/Pixel_Mixins/_misc.scss";
+// @import "pixel_styles/Pixel_Mixins/_responsive.scss";
+
+// // ! Pixel Classes
+// @import "pixel_styles/Pixel_Class/_backgrounds.scss";
+// @import "pixel_styles/Pixel_Class/_borders.scss";
+// @import "pixel_styles/Pixel_Class/_buttons.scss";
+// @import "pixel_styles/Pixel_Class/_colors.scss";
+// @import "pixel_styles/Pixel_Class/_forms.scss";
+// @import "pixel_styles/Pixel_Class/_layout.scss";
+// @import "pixel_styles/Pixel_Class/_margin.scss";
+// @import "pixel_styles/Pixel_Class/_padding.scss";
+// @import "pixel_styles/Pixel_Class/_typography.scss";
+// @import "pixel_styles/Pixel_Class/_utils.scss";
+// @import "pixel_styles/Pixel_Class/_shadows.scss";
+
+// // ? starters and templates need to be imported last
+// @import "pixel_styles/_starter.scss";
+
+@import "./pages/Login.scss";
+@import "./pages/Signup.scss";
+@import "./pages/Account.scss";
+@import "./pages/Menu.scss";
+@import "./pages/Thanks.scss";
+@import "./pages/Room.scss";

@@ -1,0 +1,77 @@
+/*
+ * Mixin: border
+ * Sets the border-color, border-width, border-style, and border-radius properties.
+ * Default values are '1px' for width, 'solid' for style, and '0' for radius.
+ */
+@mixin border($color: $color-border, $width: 1px, $style: solid, $radius: 0) {
+  border: $width $style $color;
+  border-radius: $radius;
+}
+
+/*
+ * Mixin: border-x
+ * Sets the border-left and border-right properties with the specified color, width, and style. 
+ * Also sets the border-radius for all sides. 
+ * Default values are '1px' for width, 'solid' for style, and '0' for radius.
+ */
+@mixin border-x($color: $color-border, $width: 1px, $style: solid, $radius: 0) {
+  border-left: $width $style $color;
+  border-right: $width $style $color;
+  border-radius: $radius;
+}
+
+/*
+ * Mixin: border-y
+ * Sets the border-top and border-bottom properties with the specified color, width, and style. 
+ * Also sets the border-radius for all sides. 
+ * Default values are '1px' for width, 'solid' for style, and '0' for radius.
+ */
+@mixin border-y($color: $color-border, $width: 1px, $style: solid, $radius: 0) {
+  border-top: $width $style $color;
+  border-bottom: $width $style $color;
+  border-radius: $radius;
+}
+
+/*
+ * Mixin: border-neon
+ * Sets the border-color and box-shadow properties with the specified color and glow size.
+ * Default values are '3px' for width and '0' for radius.
+ */
+@mixin border-neon($color: $color-border, $glow-size: 5px) {
+  border: 3px solid $color;
+  box-shadow: 0 0 $glow-size $color;
+}
+
+/*
+ * Mixin: border-animated
+ * Sets the border-color and animation properties with the specified colors and duration.
+ * Default value for duration is '1s'.
+ */
+@mixin border-animated($color-start, $color-end, $duration: 1s) {
+  border: 3px solid $color-start;
+  animation: change-color $duration infinite;
+
+  @keyframes change-color {
+    0% {
+      border-color: $color-start;
+    }
+    100% {
+      border-color: $color-end;
+    }
+  }
+}
+
+/*
+ * Mixin: border-animated-neon
+ * Sets the border-color and animation properties with the specified colors and duration.
+ * Default value for duration is '1s'.
+ */
+@mixin border-animated-neon(
+  $color-start,
+  $color-end,
+  $glow-size,
+  $duration: 1s
+) {
+  @include border-animated($color-start, $color-end, $duration);
+  box-shadow: 0 0 $glow-size $color-start;
+}

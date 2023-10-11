@@ -1,0 +1,37 @@
+@import "../../../index.scss";
+
+.side-nav-container {
+  position: relative;
+
+  button {
+    @include button($color-tertiary);
+  }
+
+  .side-nav {
+    @include size(250px, 100%);
+    @include position(
+      fixed,
+      0,
+      null,
+      null,
+      0
+    ); // ! POSITIONING mixin use example top -> 0, right -> null, bottom -> null, left -> 0
+
+    overflow: auto;
+    background-color: #ecf0f1;
+    border-right: 1px solid #bdc3c7;
+    z-index: $z-index-modal;
+
+    .side-nav-item {
+      padding: 10px;
+      color: $color-primary;
+      text-decoration: none;
+      display: block;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: $color-tertiary;
+      }
+    }
+  }
+}

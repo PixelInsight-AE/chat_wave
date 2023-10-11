@@ -1,0 +1,76 @@
+// form mixin including styles for the form itself, inputs and labels
+@mixin form() {
+  @include flex(column, center, center);
+  padding: $base-padding;
+  margin: $base-margin;
+  border-radius: $base-border-radius;
+  input {
+    margin: $base-margin;
+    padding: calc(#{$base-padding} / 2);
+    border-radius: calc(#{$base-border-radius} / 2);
+  }
+  button {
+    @include button($color-success);
+  }
+}
+
+@mixin form-label(
+  $font-size: $font-size-md,
+  $font-weight: 600,
+  $color: $color-primary
+) {
+  @include font($font-primary, $font-size, $font-weight);
+  color: $color;
+}
+
+@mixin form-input(
+  $border-color: $color-neutral2,
+  $border-width: 1px,
+  $border-style: solid,
+  $border-radius: $base-border-radius,
+  $padding: $base-padding
+) {
+  border: $border-width $border-style $border-color;
+  border-radius: $border-radius;
+  padding: $padding;
+}
+
+@mixin form-validation(
+  $valid-color: $color-success,
+  $invalid-color: $color-error
+) {
+  &.valid {
+    border-color: $valid-color;
+  }
+  &.invalid {
+    border-color: $invalid-color;
+  }
+}
+
+@mixin form-control(
+  $checked-bg-color: $color-primary,
+  $unchecked-bg-color: $color-white,
+  $border-color: $color-neutral2
+) {
+  input[type="checkbox"],
+  input[type="radio"] {
+    &:checked {
+      background-color: $checked-bg-color;
+    }
+    &:not(:checked) {
+      background-color: $unchecked-bg-color;
+      border-color: $border-color;
+    }
+  }
+}
+
+@mixin form-focus(
+  $focus-border-color: $color-primary,
+  $focus-border-width: 2px
+) {
+  &:focus {
+    outline: none;
+    border-color: $focus-border-color;
+    border-width: $focus-border-width;
+  }
+}

@@ -1,0 +1,78 @@
+@import "../../../index.scss";
+
+@mixin fixed-top-left {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+#backdrop-hook {
+  .backdrop {
+    @include fixed-top-left;
+    @include size(100%, 100vh);
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 10;
+  }
+}
+
+#sidenav-hook {
+  .side-drawer {
+    @include flex(column, center, center);
+    @include font($color-secondary, 1.5rem, 400);
+    @include size(100%, 100vh);
+    @include fixed-top-left;
+    z-index: 100;
+    background: $color-primary;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+    #mobile-nav {
+      ul {
+        @include flex(column, center, center);
+        li {
+          @include margin-y(1rem);
+        }
+      }
+    }
+  }
+}
+
+#navbar {
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  #desktop-nav {
+    @include flex(row, space-around, center);
+    @include font($color-primary, 1.5rem, 400);
+    @include size(100%, 56px);
+    background-color: $color-tertiary;
+    .burger-menu {
+      @include button($color-accent1);
+      @include padding-x(0.25rem);
+      align-self: flex-start;
+      display: none;
+      left: 0;
+      span {
+        @include flex(column, space-around, center);
+        @include size(24px, 2px);
+        background-color: white;
+        margin: 4px;
+      }
+      @media (max-width: $breakpoint-sm) {
+        display: block;
+      }
+    }
+    ul {
+      @include flex(row, space-around, center);
+      li {
+        @include margin-x(1rem);
+      }
+    }
+  }
+  @media (max-width: $breakpoint-sm) {
+    #desktop-nav {
+      @include flex(row, flex-start, center);
+      ul {
+        display: none;
+      }
+    }
+  }
+}
