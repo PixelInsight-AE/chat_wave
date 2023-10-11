@@ -1,0 +1,10 @@
+CREATE OR REPLACE FUNCTION fn_check_room_password(
+  room_id uuid,
+  room_password text
+)
+RETURNS BOOLEAN AS
+$$
+  BEGIN
+    RETURN (SELECT room_password = fn_hash_password(room_password) FROM rooms WHERE id = room_id);
+  END;
+$$ LANGUAGE PLPGSQL;

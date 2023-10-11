@@ -1,0 +1,21 @@
+CREATE OR REPLACE FUNCTION fn_create_room(
+  owner_id uuid,
+  name text,
+  description text,
+  room_type text,
+  room_password text,
+  capacity integer
+) RETURNS void AS
+
+$$
+  BEGIN
+    IF room_password IS NOT NULL THEN
+      room_password := fn_hash_password(room_password);
+    END IF;
+  
+    INSERT INTO rooms (owner, name, description, room_type, room_password, capacity)
+    VALUES (owner_id, name, description, room_type, room_password, capacity);
+END;
+$$ LANGUAGE PLPGSQL;
+
+

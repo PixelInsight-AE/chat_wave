@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS converations CASCADE;
 CREATE TABLE converations(
     id serial PRIMARY KEY,
     sender_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
-    receiver_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
+    room_id uuid REFERENCES rooms(id) ON DELETE CASCADE,
     message text NOT NULL,
     sent_at timestamp with time zone DEFAULT now(),
 );

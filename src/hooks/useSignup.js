@@ -26,15 +26,15 @@ const useSignup = () => {
       .eq("username", username);
     if (data.length > 0) {
       setError("Username already exists");
-      return false;
+      return true;
     }
-    return true;
+    return false;
   };
 
   const handleSignup = async () => {
     setLoading(true);
     const userExists = await checkIfUserExists();
-    if (!userExists) return;
+    if (userExists) return;
     if (password.length < 8) {
       return setError("Password must be at least 8 characters");
     }
