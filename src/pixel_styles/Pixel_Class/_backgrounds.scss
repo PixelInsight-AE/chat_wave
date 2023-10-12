@@ -1,6 +1,0 @@
-// ? For map see src/pixel_styles/config/_maps.scss
-@each $color-name, $color-value in $colors {
-  .bg-#{$color-name} {
-    background-color: $color-value;
-  }
-}

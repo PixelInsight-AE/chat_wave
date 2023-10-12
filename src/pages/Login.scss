@@ -1,0 +1,66 @@
+.login {
+  @include flex(column, center, center);
+  height: 91vh;
+  color: $c-text;
+
+  &__title {
+    @include flex(row, center, flex-end);
+    h1 {
+      color: $c-primary;
+      font-size: 56px;
+      font-family: 'Inria Sans';
+    }
+  }
+  &__login-to-account {
+    color: $c-text;
+  }
+  &__error {
+    color: $c-error;
+  }
+  form {
+    margin-top: 2.8rem;
+    @include flex(column, center, center);
+    input {
+      font-size: 20px;
+      color: $c-text;
+      width: 24.375rem;
+      padding: 0.5rem 3.125rem 0.5rem 0.75rem;
+      margin: 0.5rem 0;
+      background: none;
+      outline: $c-primary;
+      border: 3px solid #1b6da4;
+      border-radius: 8px;
+    }
+    button {
+      width: 24.375rem;
+      padding: 0.5rem 3.125rem 0.5rem 0.75rem;
+      margin: 0.5rem 0;
+      background: none;
+      outline: none;
+      border: 3px solid $c-secondary;
+      border-radius: 8px;
+      font-size: 1.6rem;
+      font-family: 'Inria Sans';
+      cursor: pointer;
+      color: $c-text;
+    }
+  }
+  &__forgot-password {
+    padding-top: 3.6rem;
+    align-self: end;
+    color: $c-primary;
+    font-size: 12px;
+  }
+  &__dont-have-account {
+    align-self: start;
+    &--link {
+      color: $c-primary;
+      text-decoration: none;
+    }
+  }
+  &__cookie-notification {
+    &--button {
+      color: $c-primary;
+    }
+  }
+}

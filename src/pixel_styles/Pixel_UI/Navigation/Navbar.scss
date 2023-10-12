@@ -18,11 +18,9 @@
 #sidenav-hook {
   .side-drawer {
     @include flex(column, center, center);
-    @include font($color-secondary, 1.5rem, 400);
     @include size(100%, 100vh);
     @include fixed-top-left;
     z-index: 100;
-    background: $color-primary;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
     #mobile-nav {
       ul {
@@ -41,11 +39,8 @@
   padding: 0;
   #desktop-nav {
     @include flex(row, space-around, center);
-    @include font($color-primary, 1.5rem, 400);
     @include size(100%, 56px);
-    background-color: $color-tertiary;
     .burger-menu {
-      @include button($color-accent1);
       @include padding-x(0.25rem);
       align-self: flex-start;
       display: none;

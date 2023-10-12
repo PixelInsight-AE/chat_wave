@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+.signup {
+  @include flex(column, center, center);
+  color: $c-text;
+  height: 91vh;
+
+  &__title {
+    @include flex(row, center, flex-end);
+
+    padding-bottom: 2.4rem;
+    h1 {
+      font-size: 56px;
+      font-family: 'Inria Sans';
+      color: $c-primary;
+      margin-right: 0.4rem;
+    }
+  }
+  &__create-account {
+    padding-bottom: 0.2rem;
+    //align-self: start;
+  }
+  &__error {
+  }
+  form {
+    @include flex(column, center, center);
+    input {
+      font-size: 20px;
+      color: $c-text;
+      width: 24.375rem;
+      padding: 0.5rem 3.125rem 0.5rem 0.75rem;
+      margin: 0.5rem 0;
+      background: none;
+      outline: $c-primary;
+      border: 3px solid #1b6da4;
+      border-radius: 8px;
+    }
+    button {
+      width: 24.375rem;
+      padding: 0.5rem 3.125rem 0.5rem 0.75rem;
+      margin: 0.5rem 0;
+      background: none;
+      outline: none;
+      border: 3px solid $c-secondary;
+      border-radius: 8px;
+      color: $c-text;
+      font-size: 1.6rem;
+      font-family: 'Inria Sans';
+      cursor: pointer;
+    }
+  }
+  &__terms-and-conditions {
+    font-size: 12px;
+    padding-top: 48px;
+    align-self: start;
+    &--link {
+      color: $c-primary;
+      text-decoration: none;
+    }
+  }
+  &__already-have-account {
+    font-size: 12px;
+
+    align-self: end;
+    &--link {
+      color: $c-primary;
+      text-decoration: none;
+    }
+  }
+}

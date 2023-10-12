@@ -46,9 +46,11 @@ export const AccordionItem = ({ index, title, children }) => {
             exit="collapsed"
             variants={{
               open: { opacity: 1, height: "auto" },
-              collapsed: { opacity: 0, height: 0 },
+              collapsed: {
+                opacity: 0,
+                height: 0,
+              },
             }}
-            transition={{ duration: 0.8 }}
           >
             {children}
           </motion.div>

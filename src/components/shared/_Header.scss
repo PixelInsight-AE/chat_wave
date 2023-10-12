@@ -1,0 +1,44 @@
+.header {
+  @include flex(row, space-between, center);
+  position: relative;
+  color: $c-text;
+  &__logo-wrapper {
+    @include flex(row, flex-start, center);
+    background-color: #514b4b;
+    width: 100%;
+    padding: 8px 16px;
+  }
+  &__logo {
+    padding-right: 16px;
+  }
+  &__title {
+    font-size: 32px;
+    color: c-primary;
+  }
+}
+
+.navigation {
+  // @include flex(row, flex-end, center);
+  background-color: #514b4b;
+  position: relative;
+  // height: 53px;
+  &__hamburger {
+    cursor: pointer;
+  }
+  &__dropdown-container {
+    top: 53px;
+    overflow: hidden;
+    // background-color: #514b4b;
+  }
+  &__dropdown-link {
+    display: block;
+    padding: 10px;
+    color: #000;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #f0f0f0;
+    }
+  }
+}
