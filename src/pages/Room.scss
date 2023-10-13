@@ -1,0 +1,48 @@
+.room {
+  @include flex(row, flex-start, flex-start);
+  font-family: 'Inria Sans';
+  .chat-room {
+    &__header {
+      width: 85vw;
+      background-color: $c-secondary;
+      @include flex(row, space-between, center);
+      &--bookmark {
+        @include flex(row, flex-start, center);
+        margin-left: 1rem;
+      }
+      &--name {
+        font-size: 24px;
+        font-weight: 400;
+        margin-left: 0.4rem;
+      }
+      &--capacity {
+        margin-right: 1rem;
+      }
+    }
+    .chat-area {
+      max-height: 84vh;
+      overflow-y: scroll;
+    }
+    &__input {
+      button {
+        margin-left: 1.2rem;
+        color: $c-text;
+        background-color: $c-secondary;
+        border-radius: 8px;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        font-size: 16px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        cursor: pointer;
+      }
+      input {
+        box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 8px;
+        padding: 0.4rem 0;
+        width: 75vw;
+        margin-left: 1.2rem;
+        font-size: 16px;
+      }
+    }
+  }
+}

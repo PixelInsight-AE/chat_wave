@@ -5,7 +5,7 @@ const HomeScreen = () => {
     <section className="home-screen">
       <h1 className="home-screen__title">New To Chat Wave?</h1>
 
-      <Link to="/" className="home-screen__start-a-room">
+      <Link to="/new-room" className="home-screen__start-a-room">
         Try <span className="home-screen__start-a-room--start">Starting A Chat Room!</span>
       </Link>
       <p className="home-screen__or">Or</p>
