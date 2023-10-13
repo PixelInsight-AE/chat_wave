@@ -25,6 +25,15 @@ const authSlice = createSlice({
     authenticat(state) {
       state.isAuthenticated = true;
     },
+    updateAccount(state, action) {
+      const { username, avatar_url } = action.payload;
+      state.username = username;
+      state.avatar_url = avatar_url;
+    },
+    updateUsername(state, action) {
+      const { username } = action.payload;
+      state.username = username;
+    },
   },
 });
 

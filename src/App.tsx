@@ -8,6 +8,8 @@ import { useSelector } from 'react-redux';
 import useLogin from './hooks/useLogin';
 import Header from './components/shared/Header';
 import CreateRoom from './pages/CreateRoom';
+import Room from './pages/Room';
+import Account from './pages/Account';
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -27,8 +29,9 @@ function App() {
         <Route path="*" element={<Login />} />
         {/* <Route path="/privacy-policy" element={<PrivacyPolicy />} /> */}
         <Route path="/menu" element={isAuthenticated ? <Menu /> : <Login />} />
-        <Route path="/settings" element={isAuthenticated ? <Menu /> : <Login />} />
+        <Route path="/settings" element={isAuthenticated ? <Account /> : <Login />} />
         <Route path="/new-room" element={isAuthenticated ? <CreateRoom /> : <Login />} />
+        <Route path="/room/:id" element={isAuthenticated ? <Room /> : <Login />} />
       </Routes>
     </>
   );

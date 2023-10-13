@@ -5,6 +5,7 @@ CREATE OR REPLACE FUNCTION fn_create_room(
   room_type text,
   room_password text,
   capacity integer
+  room_img text
 ) RETURNS void AS
 
 $$
@@ -13,8 +14,8 @@ $$
       room_password := fn_hash_password(room_password);
     END IF;
   
-    INSERT INTO rooms (owner, name, description, room_type, room_password, capacity)
-    VALUES (owner_id, name, description, room_type, room_password, capacity);
+    INSERT INTO rooms (owner, name, description, room_type, room_password, capacity, room_img)
+    VALUES (owner_id, name, description, room_type, room_password, capacity, room_img);
 END;
 $$ LANGUAGE PLPGSQL;
 

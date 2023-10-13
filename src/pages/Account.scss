@@ -1,0 +1,54 @@
+.account {
+  margin-top: 4rem;
+  margin-left: 8rem;
+  font-family: 'Inria Sans';
+  &--title {
+    font-size: 36px;
+    color: #278bba;
+    margin-bottom: 5rem;
+  }
+  input {
+    width: 350px;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid $c-primary;
+    background: none;
+    font-size: 18px;
+    color: $c-text;
+  }
+
+  .avatar-wrapper {
+    margin-top: 4rem;
+    &--title {
+      margin-bottom: 0.4rem;
+      color: $c-text;
+    }
+
+    &--img-preview {
+      margin-bottom: 2rem;
+      @include flex(row, center, center);
+      width: 250px;
+      color: $c-text;
+      font-size: 36px;
+      height: 250px;
+      border-radius: 8px;
+      border: 3px dotted $c-accent;
+    }
+  }
+  button {
+    margin-top: 2rem;
+    width: 250px;
+    height: 50px;
+    border-radius: 8px;
+    border: 2px solid $c-accent;
+    background: none;
+    color: $c-primary;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+      background: darken($c-accent, 10%);
+    }
+  }
+}

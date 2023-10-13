@@ -25,30 +25,32 @@ const useLogin = () => {
       email: email,
       password: password,
     });
+    const username = await supabase.from('profiles').select('username').eq('id', data.user.id);
+    console.log(data.user.user_metadata.avatar_url);
     if (error) return setError(error.message);
-    console.log(data);
     dispatch(
       authActions.login({
         id: data.user.id,
-        username: data.user.username,
-        avatar_url: data.user.avatar_url,
+        username: username.data[0].username,
+        avatar_url: data.user.user_metadata.avatar_url,
       }),
     );
-    if (data.avatar_url) {
-      //navigate('/menu');
+    if (data.user.user_metadata.avatar_url) {
+      navigate('/menu');
     }
-    //navigate('/settings');
+    navigate('/settings');
   };
 
   const checkAuth = async () => {
     const session = await supabase.auth.getSession();
     if (!session.data) return;
-    const { data } = await supabase.auth.getUser();
+    const data = await supabase.from('profiles').select('username, avatar_url').eq('id', session.data.session.user.id);
+    console.log(data.data[0].username, 'data');
     dispatch(
       authActions.login({
         id: session.data.session.user.id,
-        username: data.user.user_metadata.username,
-        avatar_url: data.user.user_metadata.avatar_url,
+        username: data.data[0].username,
+        avatar_url: data.data[0].avatar_url,
       }),
     );
     navigate('/menu');

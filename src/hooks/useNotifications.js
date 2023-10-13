@@ -16,7 +16,7 @@ const useNotifications = () => {
   useEffect(() => {
     const channel = supabase
       .channel(`notifications:${profileId}`)
-      .on('postgres_changes', { event: 'INSERT' }, (payload) => {
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' }, (payload) => {
         console.log(payload);
         fetchNotifications();
       })

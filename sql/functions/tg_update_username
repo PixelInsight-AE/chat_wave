@@ -1,0 +1,15 @@
+CREATE OR REPLACE FUNCTION fn_update_username()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE auth.users SET auth.users.raw_user_meta_data.username = NEW. WHERE id = NEW.id;
+    RETURN NEW;
+
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tg_update_username()
+AFTER UPDATE ON auth.users
+FOR EACH ROW
+WHEN (OLD.username IS DISTINCT FROM NEW.username)
+EXECUTE PROCEDURE fn_update_username();
+```

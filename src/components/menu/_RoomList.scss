@@ -4,6 +4,7 @@
   padding: 0;
   max-height: 560px;
   overflow-y: scroll;
+
   &__room {
     @include flex(row, space-between, flex-start);
     margin: 1.6rem 0.8rem;
