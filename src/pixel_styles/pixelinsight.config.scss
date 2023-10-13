@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Work+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+$heading-1: 4rem;
+$heading-2: 3.2rem;
+$heading-3: 2.4rem;
+$heading-4: 2rem;
+$heading-5: 1.6rem;
+$heading-6: 1.2rem;
+
+$body-1: 1.6rem;
+$body-2: 1.2rem;
+$body-3: 0.8rem;
+
+$font-headings: 'Inria Sans';
+$font-body: 'Inria Sans';
+$font-brand: 'Inria Sans';
+
+$c-primary: #45d6f0;
+$c-secondary: #f35151;
+$c-accent: #ffb800;
+
+$c-gradient-1: #535558;
+$c-gradient-2: #1e2633;
+$c-gradient-3: #1a222e;
+
+$c-text: #f5f5f5;
+$c-body: #1e1e1e;
+
+$c-neutral-100: #f8f9fa;
+$c-neutral-200: #e9ecef;
+$c-neutral-300: #dee2e6;
+$c-neutral-400: #ced4da;
+$c-neutral-500: #adb5bd;
+$c-neutral-600: #6c757d;
+$c-neutral-700: #495057;
+$c-neutral-800: #343a40;
+$c-neutral-900: #212529;
+
+$c-error: #d32752;
+$c-warning: #f6c31c;
+$c-info: #17a2b8;
+$c-success: #28a745;
+
+/* Breakpoints */
+$breakpoint-xs: 350px;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-xxl: 1600px;

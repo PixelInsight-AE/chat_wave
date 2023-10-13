@@ -32,10 +32,17 @@ FOR select using (auth.uid() = profile_id);
 
 CREATE OR REPLACE FUNCTION fn_notify_friend_request()
 RETURNS trigger AS $$
+DECLARE
+    friend_username text;
 
 BEGIN
+    SELECT username INTO friend_username FROM profiles WHERE id = NEW.friend_id;
     INSERT INTO notifications (profile_id, notification_type, notification_data)
-    VALUES (NEW.profile_id, 'friend_request', jsonb_build_object('profile_id', NEW.profile_id, 'friend_id', NEW.friend_id));
+    VALUES (NEW.profile_id, 'friend_request', jsonb_build_object(
+        'profile_id', NEW.profile_id,
+        'friend_id', NEW.friend_id,
+        'friend_username', friend_username
+    ));
 
     RETURN NEW;
 END;
@@ -50,9 +57,16 @@ execute procedure fn_notify_friend_request();
 
 CREATE OR REPLACE FUNCTION fn_notify_friend_accept()
 RETURNS trigger AS $$
+DECLARE
+    friend_username text;
 BEGIN
+    SELECT INTO friend_username FROM profiles WHERE id = NEW.friend_id;
     INSERT INTO notifications (profile_id, notification_type, notification_data)
-    VALUES (NEW.profile_id, 'friend_accept', jsonb_build_object('profile_id', NEW.profile_id, 'friend_id', NEW.friend_id));
+    VALUES (NEW.profile_id, 'friend_accept', jsonb_build_object(
+        'profile_id', NEW.profile_id,
+        'friend_id', NEW.friend_id,
+        'friend_username', friend_username
+    ));
     RETURN NEW;
 END;
 

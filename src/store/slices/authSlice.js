@@ -1,16 +1,16 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   isAuthenticated: false,
-  username: "",
-  id: "",
-  status: "",
-  avatar_url: "",
+  username: '',
+  id: '',
+  status: '',
+  avatar_url: '',
 };
 
 const authSlice = createSlice({
   initialState,
-  name: "auth",
+  name: 'auth',
   reducers: {
     login(state, action) {
       const { username, id, avatar_url } = action.payload;
@@ -21,6 +21,9 @@ const authSlice = createSlice({
     },
     logout() {
       return initialState;
+    },
+    authenticat(state) {
+      state.isAuthenticated = true;
     },
   },
 });

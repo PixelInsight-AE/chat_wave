@@ -1,0 +1,4 @@
+.menu {
+  font-family: 'Inria Sans';
+  @include flex(row, flex-start, flex-start);
+}

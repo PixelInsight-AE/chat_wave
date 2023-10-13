@@ -1,0 +1,18 @@
+.main-menu {
+  @include flex(column, center, center);
+  &__list {
+    width: 85vw;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    flex-grow: 1;
+    &--items {
+      @include flex(row, space-evenly, flex-end);
+      list-style: none;
+      color: $c-primary;
+      font-size: 32px;
+    }
+  }
+
+  &__content {
+    @include flex(column, center, center);
+  }
+}

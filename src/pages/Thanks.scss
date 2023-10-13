@@ -1,0 +1,31 @@
+.thanks {
+  font-family: 'Inria Sans';
+  @include flex(column, center, center);
+  height: 90vh;
+  &__title {
+    @include flex(row, center, flex-end);
+    h1 {
+      font-size: 56px;
+      color: $c-primary;
+      margin-right: 0.4rem;
+    }
+    margin-bottom: 5.2rem;
+  }
+  h2 {
+    text-align: center;
+    color: $c-text;
+    font-size: 20px;
+    width: 340px;
+    font-weight: 300;
+  }
+  &__link {
+    margin-top: 2.4rem;
+    text-decoration: none;
+    color: $c-text;
+    font-size: 20px;
+    font-weight: 300;
+    border: 2px solid $c-accent;
+    border-radius: 8px;
+    padding: 0.4rem 1.6rem;
+  }
+}
