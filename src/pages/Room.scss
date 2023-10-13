@@ -20,8 +20,34 @@
       }
     }
     .chat-area {
-      max-height: 84vh;
+      max-height: 80vh;
       overflow-y: scroll;
+
+      color: $c-text;
+      padding-bottom: 2rem;
+      &__message {
+        margin-top: 1rem;
+        text-decoration: none;
+        list-style: none;
+        &--wrapper {
+          @include flex(row, flex-start, flex-end);
+          img {
+            margin-bottom: 0.4rem;
+          }
+        }
+        &--name {
+          margin-right: 0.4rem;
+          font-size: 20px;
+        }
+        &--time {
+          font-size: 12px;
+        }
+        &--text {
+          font-size: 16px;
+          margin-top: 1rem;
+          margin-left: 3.8rem;
+        }
+      }
     }
     &__input {
       button {

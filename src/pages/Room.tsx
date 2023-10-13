@@ -4,12 +4,13 @@ import supabase from '../config/supabase.js';
 import Header from '../components/shared/Header.js';
 import Footer from '../components/shared/Footer.js';
 import SideNav from '../components/menu/Sidenav.js';
+import useConverse from '../hooks/useConverse.js';
 const Room = () => {
   const { id } = useParams();
   const [room, setRoom] = useState(null);
   const [conversations, setConversations] = useState([]);
   const [error, setError] = useState(null);
-
+  const { message, handleInput, sendMessage } = useConverse(id);
   //scroll bottom chat area
   useEffect(() => {
     const chatArea = document.querySelector('.chat-area');
@@ -21,26 +22,26 @@ const Room = () => {
     const time = d.toLocaleTimeString('en-US');
     return `${d.toLocaleDateString()} ${time}`;
   };
+
+  const fetchRoom = async () => {
+    const data = await supabase.from('rooms').select('*').eq('id', id);
+    setRoom(data);
+  };
+  const fetchConversations = async () => {
+    const { data, error } = await supabase.from('conversations').select('*, sender:sender_id(*)').eq('room_id', id);
+    if (error) return setError(error.message);
+    console.log(data);
+    setConversations(data);
+  };
   useEffect(() => {
-    const fetchRoom = async () => {
-      const data = await supabase.from('rooms').select('*').eq('id', id);
-      setRoom(data);
-    };
-    fetchRoom();
-  }, []);
-  useEffect(() => {
-    const fetchConversations = async () => {
-      const { data, error } = await supabase.from('conversations').select('*, sender:sender_id(*)').eq('room_id', id);
-      if (error) return setError(error.message);
-      console.log(data);
-      setConversations(data);
-    };
     const channel = supabase
       .channel(`room:${id}`)
-      .on('postgres_changes', { event: 'INSERT' }, (payload) => {
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'conversations' }, (payload) => {
+        console.log(payload);
         fetchConversations();
       })
       .subscribe();
+    fetchRoom();
 
     fetchConversations();
     return () => {
@@ -66,18 +67,20 @@ const Room = () => {
               conversations.map((conversation) => {
                 return (
                   <li className="chat-area__message">
-                    <img
-                      style={{
-                        width: '50px',
-                        height: '50px',
-                        borderRadius: '50%',
-                        marginRight: '10px',
-                      }}
-                      src={conversation.sender.avatar_url}
-                      alt=""
-                    />
-                    <p className="chat-area__message--name">{conversation.sender.username}</p>
-                    <p className="chat-area__message--time">{formatDateTime(conversation.sent_at)}</p>
+                    <section className="chat-area__message--wrapper">
+                      <img
+                        style={{
+                          width: '50px',
+                          height: '50px',
+                          borderRadius: '50%',
+                          marginRight: '10px',
+                        }}
+                        src={conversation.sender.avatar_url}
+                        alt=""
+                      />
+                      <p className="chat-area__message--name">{conversation.sender.username}</p>
+                      <p className="chat-area__message--time">{formatDateTime(conversation.sent_at)}</p>
+                    </section>
                     <p className="chat-area__message--text">{conversation.message}</p>
                   </li>
                 );
@@ -86,8 +89,14 @@ const Room = () => {
               <p>No messages yet</p>
             )}
           </ul>
-          <form className="chat-room__input">
-            <input type="text" placeholder="Express yourself" />
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              sendMessage();
+            }}
+            className="chat-room__input"
+          >
+            <input type="text" placeholder="Express yourself" onChange={handleInput} value={message} />
             <button type="submit">Send</button>
           </form>
         </div>
