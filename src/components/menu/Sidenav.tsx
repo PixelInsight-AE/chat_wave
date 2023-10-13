@@ -3,14 +3,20 @@ import useNotifications from '../../hooks/useNotifications.js';
 import { Link } from 'react-router-dom';
 import RoomsList from './RoomsList.js';
 import { useEffect, useState } from 'react';
+import Modal from '../../pixel_styles/Pixel_UI/Modal/Modal.jsx';
 const SideNav = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState('rooms'); // ['rooms', 'chats'
   const USER = useSelector((state) => state.auth);
   const { notifications } = useNotifications();
 
+  const toggleModal = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <aside className="aside-nav">
-      <section className="aside-nav__user-wrapper">
+      <section style={{ cursor: 'pointer' }} onClick={toggleModal} className="aside-nav__user-wrapper">
         <img src={USER.avatar_url} alt="" />
         <p className="aside-nav__user-wrapper--username">{USER.username}</p>
         <div className="aside-nav__user-wrapper--notification">{notifications.length}</div>
@@ -30,6 +36,40 @@ const SideNav = () => {
         <option value="rooms">Rooms</option>
         <option value="chats">Chats</option>
       </select>
+      {isOpen && (
+        <Modal isOpen={isOpen} toggleModal={toggleModal}>
+          <div className="notification-menu">
+            {notifications &&
+              notifications.map((notification) => {
+                const { owner, room_name, room_img, friend_avatar, friend_username } = notification.notification;
+                console.log(notification, 'notification');
+                if (notification.notification_type === 'room_invite') {
+                  return (
+                    <div className="notification-menu__notification">
+                      <section>
+                        <img src={room_img} alt="" />
+                        <h3>{room_name}</h3>
+                      </section>
+                      <p>Your Invited! to join {room_name}</p>
+                      <button>Join</button>
+                    </div>
+                  );
+                }
+                return (
+                  <div className="notification-menu__notification">
+                    <section>
+                      <img src={friend_avatar} alt="" />
+                      <h3>{friend_username}</h3>
+                    </section>
+                    <p>Wants To be your Friend!</p>
+                    <button>Add</button>
+                    <button>Remove</button>
+                  </div>
+                );
+              })}
+          </div>
+        </Modal>
+      )}
       <RoomsList selected={selected} />
       <Link to="/menu" className="aside-nav__main-menu-button">
         <img src="/assets/svg/back.svg" alt="" />

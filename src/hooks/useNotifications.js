@@ -9,7 +9,7 @@ const useNotifications = () => {
   const [notifications, setNotifications] = useState([]);
 
   const fetchNotifications = async () => {
-    const { data, error } = await supabase.from('notifications').select('*').eq('profile_id', profileId);
+    const { data, error } = await supabase.from('notifications').select('notification_type,notification:notification_data').eq('profile_id', profileId);
     if (error) return setError(error.message);
     setNotifications(data);
   };

@@ -77,3 +77,16 @@
     }
   }
 }
+
+.notification-menu {
+  background-color: #1e1e1e;
+  width: 450px;
+  height: 550px;
+  border: 3px solid $c-secondary;
+  border-radius: 12px;
+  font-size: 18px;
+  font-family: 'Inria Sans';
+  color: $c-text;
+  padding: 1.2rem;
+  overflow-y: scroll;
+}
