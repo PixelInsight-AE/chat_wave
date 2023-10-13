@@ -31,19 +31,37 @@ const useLogin = () => {
       authActions.login({
         id: data.user.id,
         username: data.user.username,
+        avatar_url: data.user.avatar_url,
       }),
     );
     if (data.avatar_url) {
       //navigate('/menu');
     }
-    //navigate('/profile');
+    //navigate('/settings');
   };
-  useEffect(() => {
-    console.log(password, email);
-  }, [password, email]);
 
+  const checkAuth = async () => {
+    const session = await supabase.auth.getSession();
+    if (!session.data) return;
+    const { data } = await supabase.auth.getUser();
+    dispatch(
+      authActions.login({
+        id: session.data.session.user.id,
+        username: data.user.user_metadata.username,
+        avatar_url: data.user.user_metadata.avatar_url,
+      }),
+    );
+    navigate('/menu');
+  };
+  const logout = async () => {
+    await supabase.auth.signOut();
+    dispatch(authActions.logout());
+    navigate('/login');
+  };
   return {
     login,
+    logout,
+    checkAuth,
     handleInput,
     email,
     password,

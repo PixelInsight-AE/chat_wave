@@ -3,9 +3,9 @@ import useLogin from '../hooks/useLogin';
 import { useEffect, useState } from 'react';
 import Header from '../components/shared/Header';
 import Footer from '../components/shared/Footer';
-
+import supabase from '../config/supabase.js';
 const Login = () => {
-  const { login, handleInput, email, password, error } = useLogin();
+  const { login, handleInput, email, password, error, checkAuth } = useLogin();
   const [cookieNotification, setCookieNotification] = useState(false);
 
   const handleCookieNotification = () => {
@@ -18,12 +18,12 @@ const Login = () => {
     if (cookieNotificationValue) {
       setCookieNotification(true);
     }
+    checkAuth();
   }, []);
 
   return (
     <>
       <Header />
-
       <div className="login">
         <section className="login__title">
           <h1>Chat Wave</h1>

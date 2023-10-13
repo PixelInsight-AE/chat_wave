@@ -10,3 +10,19 @@ CREATE TABLE invites (
 );
 
 
+CREATE OR REPLACE FUNCTION fn_notify_invite() RETURNS trigger AS $$
+DECLARE
+    room_name text;
+    owner text;
+
+BEGIN
+    SELECT name INTO room_name FROM rooms WHERE id = NEW.room_id;
+    -- get the owner of the rooms username the room table column owner is the reference to the profiles table id
+    SELECT username INTO owner FROM profiles WHERE id = (SELECT owner FROM rooms WHERE id = NEW.room_id);
+
+    INSERT INTO notifications (profile_id, notification_type, notification_data)
+    VALUES (NEW.profile_id, 'room_invite', jsonb_build_object('profile_id', NEW.profile_id, 'room_id', NEW.room_id, 'room_name', room_name, 'owner', owner));
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+CREATE TRIGGER tg_notify_invite AFTER INSERT ON invites FOR EACH ROW EXECUTE PROCEDURE fn_notify_invite();

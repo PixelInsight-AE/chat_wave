@@ -136,10 +136,10 @@ FOR select using (auth.uid() = sender_id or auth.uid() = receiver_id);
 
 
 CREATE POLICY chats_insert_policy ON chats
-FOR insert with check(auth.uid() = user_1 or auth.uid() = user_2);
+FOR insert with check(auth.uid() = participant_1 or auth.uid() = participant_2);
 
 CREATE POLICY chats_select_policy ON chats
-FOR select using (auth.uid() = user_1 or auth.uid() = user_2);
+FOR select using (auth.uid() = participant_1 or auth.uid() = participant_2);
 
 CREATE POLICY friends_insert_policy ON friends
 FOR insert with check(auth.uid() = profile_id or auth.uid() = friend_id);

@@ -1,0 +1,115 @@
+.create-room {
+  @include flex(row, flex-start, flex-start);
+}
+.create {
+  color: $c-text;
+
+  font-family: 'Inria Sans';
+  width: 85vw;
+  @include flex(row, space-between, center);
+  &__main {
+    margin-left: 4rem;
+  }
+  &__title {
+    font-size: 36px;
+    color: $c-primary;
+    margin: 3rem 0;
+  }
+  &__sub-title {
+    color: $c-text;
+    font-size: 28px;
+    margin-bottom: 0.4rem;
+  }
+
+  &__input {
+    cursor: pointer;
+    margin-bottom: 1.2rem;
+    color: $c-text;
+    @include flex(row, center, center);
+    border-radius: 8px;
+    height: 220px;
+    width: 220px;
+
+    border: 3px dotted $c-accent;
+  }
+  &__details {
+    @include flex(column, flex-start, flex-start);
+    input {
+      background: none;
+      border: none;
+      border-bottom: 1px solid $c-primary;
+      width: 350px;
+      outline: none;
+      font-size: 18px;
+      margin: 1.2rem 0;
+      color: $c-text;
+    }
+  }
+  &__max-users {
+    @include flex(row, flex-start, center);
+    margin-bottom: 2rem;
+    p {
+      margin-right: 0.8rem;
+    }
+    select {
+      background: none;
+      border: 1px solid $c-primary;
+      outline: none;
+      font-size: 18px;
+      padding: 0.2rem 0.5rem;
+      border-radius: 8px;
+      color: $c-text;
+    }
+  }
+  &__room-type-select {
+    @include flex(row, flex-start, center);
+    margin-bottom: 2rem;
+    p {
+      margin-right: 0.8rem;
+    }
+    select {
+      background: none;
+      border: 1px solid $c-primary;
+      outline: none;
+      font-size: 18px;
+      padding: 0.2rem 0.5rem;
+      border-radius: 8px;
+      color: $c-text;
+    }
+  }
+
+  &__privacy-settings {
+    margin-right: 24rem;
+    &--title {
+      font-size: 24px;
+      color: $c-secondary;
+      padding-bottom: 2rem;
+    }
+    &--invite {
+      color: $c-text;
+      font-size: 24px;
+      margin-bottom: 1rem;
+    }
+    &--list-of-friends {
+      border: 2px solid #278bba;
+      border-radius: 8px;
+      padding: 1rem;
+      height: 250px;
+      width: 320px;
+      margin-bottom: 3rem;
+      overflow-y: scroll;
+      background-color: #514b4b;
+
+      box-shadow: inset 0 0 2px 2px #1e1e1e;
+    }
+  }
+  &__button {
+    color: $c-primary;
+    padding: 0.2rem 0.8rem;
+    border: 2px solid $c-accent;
+    border-radius: 8px;
+    outline: none;
+    background: none;
+    font-size: 24px;
+  }
+}

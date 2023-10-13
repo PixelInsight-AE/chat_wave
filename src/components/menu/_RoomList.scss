@@ -1,0 +1,39 @@
+.room-map {
+  border: 2px solid $c-primary;
+  border-radius: 16px;
+  padding: 0;
+  max-height: 560px;
+  overflow-y: scroll;
+  &__room {
+    @include flex(row, space-between, flex-start);
+    margin: 1.6rem 0.8rem;
+
+    img {
+      margin-right: 0.4rem;
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      border: 2px solid $c-primary;
+      box-shadow: 0px 4px 4px 0 rgba(0, 0, 0, 0.25);
+    }
+    &--name {
+      margin-right: auto;
+      font-weight: 300;
+      font-size: 20px;
+      color: $c-text;
+    }
+    &--capacity {
+      color: $c-secondary;
+    }
+  }
+  &__chat {
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 1rem;
+      border: 2px solid $c-primary;
+      box-shadow: 0px 4px 4px 0 rgba(0, 0, 0, 0.25);
+    }
+  }
+}

@@ -1,0 +1,32 @@
+.home-screen {
+  padding-top: 12rem;
+  @include flex(column, center, center);
+  &__title {
+    color: $c-primary;
+    font-size: 32px;
+  }
+  &__start-a-room {
+    margin: 3rem 0;
+    text-decoration: none;
+    color: $c-text;
+    padding: 0.4rem 2rem;
+    border-radius: 8px;
+    border: 2px solid $c-primary;
+    &--start {
+      color: $c-primary;
+    }
+  }
+  &__or {
+    color: $c-primary;
+    font-size: 24px;
+  }
+  &__join-a-room {
+    margin: 3rem 0;
+
+    color: $c-accent;
+    text-decoration: none;
+    border-radius: 8px;
+    border: 2px solid $c-accent;
+    padding: 0.4rem 2.4rem;
+  }
+}

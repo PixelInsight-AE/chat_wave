@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-
+import useLogin from '../../hooks/useLogin';
 const variants = {
   open: { opacity: 1, height: 'auto' },
   closed: { opacity: 0, height: 0 },
@@ -10,7 +10,7 @@ const variants = {
 
 const DropDownNav = ({ items }) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const { logout } = useLogin();
   return (
     <nav className="navigation">
       <img className="navigation__hamburger" onClick={() => setIsOpen(!isOpen)} src="/assets/svg/hamberger.svg" alt="" />
@@ -20,6 +20,9 @@ const DropDownNav = ({ items }) => {
             {item.name}
           </Link>
         ))}
+        <li style={{ listStyle: 'none', cursor: 'pointer' }} onClick={logout}>
+          Logout
+        </li>
       </motion.ul>
     </nav>
   );

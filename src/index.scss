@@ -8,6 +8,12 @@
 @import './pages/Menu.scss';
 @import './pages/Thanks.scss';
 @import './pages/Room.scss';
+@import './pages/CreateRoom.scss';
 
 @import './components/shared/_Header.scss';
 @import './components/shared/_Footer.scss';
+
+@import './components/menu/_Sidenav.scss';
+@import './components/menu/_RoomList.scss';
+@import './components/menu/_MainMenu.scss';
+@import './components/menu/Tabs.scss';
