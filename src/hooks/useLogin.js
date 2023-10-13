@@ -44,12 +44,13 @@ const useLogin = () => {
   const checkAuth = async () => {
     const session = await supabase.auth.getSession();
     if (!session.data) return;
-    const { data } = await supabase.auth.getUser();
+    const data = await supabase.from('profiles').select('username, avatar_url').eq('id', session.data.session.user.id);
+    console.log(data.data[0].username, 'data');
     dispatch(
       authActions.login({
         id: session.data.session.user.id,
-        username: data.user.user_metadata.username,
-        avatar_url: data.user.user_metadata.avatar_url,
+        username: data.data[0].username,
+        avatar_url: data.data[0].avatar_url,
       }),
     );
     navigate('/menu');

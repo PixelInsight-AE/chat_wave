@@ -15,7 +15,7 @@ const useAccount = () => {
   const [password, setPassword] = useState(null);
 
   const dispatch = useDispatch();
-
+  console.log(USER);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -45,7 +45,8 @@ const useAccount = () => {
   const updateAccount = async () => {
     if (file) {
       const publicUrl = await uploadNewAvatar();
-      const { data, error } = await supabase.from('users').update({ username, avatar_url: publicUrl }).eq('id', USER.id);
+
+      const { data, error } = await supabase.from('profiles').update({ username, avatar_url: publicUrl }).eq('id', USER.id);
       if (error) return setError(error.message);
       dispatch(authActions.updateAccount({ username: username, avatar_url: publicUrl }));
 
@@ -53,7 +54,7 @@ const useAccount = () => {
     } else {
       const { data, error } = await supabase.from('profiles').update({ username: username }).eq('id', USER.id);
       if (error) return setError(error.message);
-      dispatch(authActions.updateAccount({ username: username }));
+      dispatch(authActions.updateUsername({ username: username }));
       alert('Account updated!');
     }
   };

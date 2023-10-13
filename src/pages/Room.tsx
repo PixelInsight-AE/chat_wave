@@ -48,6 +48,17 @@ const Room = () => {
       channel.unsubscribe();
     };
   }, []);
+  const fakeUserData = [
+    { username: 'John Doe', avatar_url: 'https://avatars.githubusercontent.com/u/84065711?v=4' },
+    {
+      username: 'Jan Doe',
+      avatar_url: 'https://avatars.githubusercontent.com/u/84065711?v=4',
+    },
+    {
+      username: 'Jeen Doe',
+      avatar_url: 'https://avatars.githubusercontent.com/u/84065711?v=4',
+    },
+  ];
   return (
     <>
       <Header />
@@ -100,6 +111,7 @@ const Room = () => {
             <button type="submit">Send</button>
           </form>
         </div>
+        <div className="in-chat"></div>
       </div>
       <Footer />
     </>

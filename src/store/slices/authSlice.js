@@ -30,6 +30,10 @@ const authSlice = createSlice({
       state.username = username;
       state.avatar_url = avatar_url;
     },
+    updateUsername(state, action) {
+      const { username } = action.payload;
+      state.username = username;
+    },
   },
 });
 

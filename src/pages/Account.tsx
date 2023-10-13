@@ -4,9 +4,10 @@ import { useState } from 'react';
 import useAccount from '../hooks/useAccount';
 import { Link, useNavigate } from 'react-router-dom';
 const Account = () => {
-  const { avatarImgUrl, accountRef, handleFileChange, handleImageClick, username, handleInputChange, updateAccount, error } = useAccount();
+  const { avatarImgUrl, avatarPreview, accountRef, handleFileChange, handleImageClick, username, handleInputChange, updateAccount, error } = useAccount();
 
   const navigate = useNavigate();
+
   return (
     <>
       <Header />
@@ -25,7 +26,7 @@ const Account = () => {
 
             <input onChange={handleFileChange} ref={accountRef} type="file" hidden={true} name="avatar" accept="image/*" />
             {avatarImgUrl ? (
-              <img onClick={handleImageClick} className="avatar-wrapper--img-preview" src={avatarImgUrl} alt="avatar" />
+              <img onClick={handleImageClick} className="avatar-wrapper--img-preview" src={avatarPreview || avatarImgUrl} alt="avatar" />
             ) : (
               <div className="avatar-wrapper--img-preview" onClick={handleImageClick}>
                 + Image
