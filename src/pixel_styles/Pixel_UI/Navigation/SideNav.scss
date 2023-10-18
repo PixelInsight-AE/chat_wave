@@ -1,4 +1,4 @@
-@import "../../../index.scss";
+@import '../../../index.scss';
 
 .side-nav-container {
   position: relative;
@@ -9,13 +9,7 @@
 
   .side-nav {
     @include size(250px, 100%);
-    @include position(
-      fixed,
-      0,
-      null,
-      null,
-      0
-    ); // ! POSITIONING mixin use example top -> 0, right -> null, bottom -> null, left -> 0
+    @include position(fixed, 0, null, null, 0); // ! POSITIONING mixin use example top -> 0, right -> null, bottom -> null, left -> 0
 
     overflow: auto;
     background-color: #ecf0f1;
@@ -24,7 +18,7 @@
 
     .side-nav-item {
       padding: 10px;
-      color: $color-primary;
+      color: $c-primary;
       text-decoration: none;
       display: block;
       transition: background-color 0.3s ease;

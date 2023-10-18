@@ -27,57 +27,48 @@ const Room = () => {
   };
 
   const fetchRoom = async () => {
-    const data = await supabase.from('rooms').select('*').eq('id', id);
+    const data = await supabase.from('rooms').select('*, conversations(*),in_chat(*)').eq('id', id);
+    console.log(data.data[0], 'data');
     setRoom(data);
   };
 
   const fetchConversations = async () => {
     const { data, error } = await supabase.from('conversations').select('*, sender:sender_id(*)').eq('room_id', id);
     if (error) return setError(error.message);
-    console.log(data);
     setConversations(data);
+  };
+
+  const fetchPeopleInChat = async () => {
+    const { data, error } = await supabase.from('in_chat').select('*, users:profile_id(*)').eq('room_id', id);
+    if (error) return setError(error.message);
+
+    setPeopleInChat(data);
+  };
+  const enterChat = async () => {
+    const { data, error } = await supabase.from('in_chat').insert({
+      profile_id: userId,
+      room_id: id,
+    });
+    if (error) return setError(error.message);
+    await fetchPeopleInChat();
+  };
+  const leaveChat = async () => {
+    await supabase.from('in_chat').delete().eq('room_id', id).eq('profile_id', userId);
   };
 
   useEffect(() => {
     fetchRoom();
     fetchConversations();
-  }, [id]);
-
-  useEffect(() => {
-    const fetchPeopleInChat = async () => {
-      const { data, error } = await supabase.from('in_chat').select('*, users:profile_id(*)').eq('room_id', id);
-      if (error) return setError(error.message);
-      console.log(data);
-
-      setPeopleInChat(data);
-    };
-    const enterChat = async () => {
-      const { data, error } = await supabase.from('in_chat').insert({
-        profile_id: userId,
-        room_id: id,
-      });
-      if (error) return setError(error.message);
-      console.log(data);
-      await fetchPeopleInChat();
-    };
-    const leaveChat = async () => {
-      await supabase.from('in_chat').delete().eq('room_id', id).eq('profile_id', userId);
-    };
     enterChat();
-    return () => {
-      leaveChat();
-    };
-  }, [id, userId]);
-  useEffect(() => {
     const channel = supabase
       .channel(`room:${id}`)
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'conversations' }, (payload) => {
-        console.log(payload);
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'conversations' }, () => {
         fetchConversations();
       })
       .subscribe();
 
     return () => {
+      leaveChat();
       channel.unsubscribe();
     };
   }, [id]);

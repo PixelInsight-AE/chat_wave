@@ -35,7 +35,7 @@
 
 #modal {
   button {
-    @include button($color-primary);
+    @include button($c-primary);
     @include margin-y(1rem);
     display: block;
   }

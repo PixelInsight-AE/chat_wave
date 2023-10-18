@@ -37,5 +37,17 @@ const authSlice = createSlice({
   },
 });
 
+// //ac6tion creators
+// const thunkAction = () => {
+//   return async (dispatch)=>{
+//     dispatch();
+//     try{
+
+//     }
+//     catch(error){}
+
+//   }
+// };
+
 export default authSlice.reducer;
 export const authActions = authSlice.actions;

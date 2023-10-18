@@ -8,7 +8,7 @@ import { acceptFriendRequest, declineFriendRequest } from '../../helpers/friends
 const SideNav = () => {
   const [selected, setSelected] = useState('rooms'); // ['rooms', 'chats'
   const USER = useSelector((state) => state.auth);
-  const { notifications } = useNotifications();
+  const { notifications, isOpen } = useNotifications();
 
   return (
     <aside className="aside-nav">
