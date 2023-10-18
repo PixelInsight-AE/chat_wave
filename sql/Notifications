@@ -27,6 +27,8 @@ FOR insert with check(auth.uid() = profile_id);
 CREATE POLICY notifications_select_policy ON notifications
 FOR select using (auth.uid() = profile_id);
 
+CREATE POLICY notifications_update_policy ON notifications
+FOR update on notifications using (auth.uid() = profile_id);
 
 
 
@@ -62,7 +64,7 @@ DECLARE
 BEGIN
     SELECT INTO friend_username FROM profiles WHERE id = NEW.friend_id;
     INSERT INTO notifications (profile_id, notification_type, notification_data)
-    VALUES (NEW.profile_id, 'friend_accept', jsonb_build_object(
+    VALUES (NEW.friend_id_id, 'friend_accept', jsonb_build_object(
         'profile_id', NEW.profile_id,
         'friend_id', NEW.friend_id,
         'friend_username', friend_username
@@ -77,3 +79,20 @@ after update on friends for each row
 when (NEW.status = 'accepted')
 execute procedure fn_notify_friend_accept();
 
+
+
+DECLARE
+    friend_username text;
+    friend_avatar text;
+BEGIN
+    SELECT avatar_url INTO friend_avatar FROM profiles WHERE id = NEW.friend_id;
+    SELECT INTO friend_username FROM profiles WHERE id = NEW.friend_id;
+    INSERT INTO notifications (profile_id, notification_type, notification_data)
+    VALUES (NEW.profile_id, 'friend_accept', jsonb_build_object(
+        'profile_id', NEW.profile_id,
+        'friend_id', NEW.friend_id,
+        'friend_username', friend_username,
+        'friend_avatar', friend_avatar
+    ));
+    RETURN NEW;
+END;

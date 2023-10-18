@@ -3,7 +3,7 @@
   font-family: 'Inria Sans';
   .chat-room {
     &__header {
-      width: 85vw;
+      width: 70vw;
       background-color: $c-secondary;
       @include flex(row, space-between, center);
       &--bookmark {
@@ -20,9 +20,9 @@
       }
     }
     .chat-area {
-      max-height: 80vh;
+      max-height: 74vh;
       overflow-y: scroll;
-
+      max-width: 72vw;
       color: $c-text;
       padding-bottom: 2rem;
       &__message {
@@ -49,6 +49,7 @@
         }
       }
     }
+
     &__input {
       button {
         margin-left: 1.2rem;
@@ -65,10 +66,13 @@
         box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 8px;
         padding: 0.4rem 0;
-        width: 75vw;
+        width: 65vw;
         margin-left: 1.2rem;
         font-size: 16px;
       }
     }
   }
+}
+.in-chat {
+  width: 25vw;
 }

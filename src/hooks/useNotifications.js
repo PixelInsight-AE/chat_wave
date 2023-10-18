@@ -4,14 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 const useNotifications = () => {
   const profileId = useSelector((state) => state.auth.id);
+  console.log(profileId);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [notifications, setNotifications] = useState([]);
 
   const fetchNotifications = async () => {
-    const { data, error } = await supabase.from('notifications').select('*').eq('profile_id', profileId);
+    const { data, error } = await supabase.from('notifications').select('*,notification:notification_data').eq('profile_id', profileId);
     if (error) return setError(error.message);
-    setNotifications(data);
+    console.log(data);
+    const unreadNotifications = data.filter((notification) => notification.read === false);
+    setNotifications(unreadNotifications);
   };
   useEffect(() => {
     const channel = supabase

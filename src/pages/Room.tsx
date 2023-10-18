@@ -1,21 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import supabase from '../config/supabase.js';
 import Header from '../components/shared/Header.js';
 import Footer from '../components/shared/Footer.js';
 import SideNav from '../components/menu/Sidenav.js';
 import useConverse from '../hooks/useConverse.js';
+import InChat from '../components/chatroom/InChat.js';
+import FriendsList from '../components/chatroom/FriendsList.js';
+import useChatRoom from '../hooks/useChatRoom.js';
+import { useSelector } from 'react-redux';
 const Room = () => {
   const { id } = useParams();
+  const [peopleInChat, setPeopleInChat] = useState([]);
+  const userId = useSelector((state) => state.auth.id);
+
   const [room, setRoom] = useState(null);
   const [conversations, setConversations] = useState([]);
   const [error, setError] = useState(null);
+  const [inChat, setInChat] = useState(true);
   const { message, handleInput, sendMessage } = useConverse(id);
-  //scroll bottom chat area
-  useEffect(() => {
-    const chatArea = document.querySelector('.chat-area');
-    chatArea.scrollTop = chatArea.scrollHeight;
-  }, [conversations]);
 
   const formatDateTime = (date) => {
     const d = new Date(date);
@@ -27,12 +30,44 @@ const Room = () => {
     const data = await supabase.from('rooms').select('*').eq('id', id);
     setRoom(data);
   };
+
   const fetchConversations = async () => {
     const { data, error } = await supabase.from('conversations').select('*, sender:sender_id(*)').eq('room_id', id);
     if (error) return setError(error.message);
     console.log(data);
     setConversations(data);
   };
+
+  useEffect(() => {
+    fetchRoom();
+    fetchConversations();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchPeopleInChat = async () => {
+      const { data, error } = await supabase.from('in_chat').select('*, users:profile_id(*)').eq('room_id', id);
+      if (error) return setError(error.message);
+      console.log(data);
+
+      setPeopleInChat(data);
+    };
+    const enterChat = async () => {
+      const { data, error } = await supabase.from('in_chat').insert({
+        profile_id: userId,
+        room_id: id,
+      });
+      if (error) return setError(error.message);
+      console.log(data);
+      await fetchPeopleInChat();
+    };
+    const leaveChat = async () => {
+      await supabase.from('in_chat').delete().eq('room_id', id).eq('profile_id', userId);
+    };
+    enterChat();
+    return () => {
+      leaveChat();
+    };
+  }, [id, userId]);
   useEffect(() => {
     const channel = supabase
       .channel(`room:${id}`)
@@ -41,24 +76,28 @@ const Room = () => {
         fetchConversations();
       })
       .subscribe();
-    fetchRoom();
 
-    fetchConversations();
     return () => {
       channel.unsubscribe();
     };
-  }, []);
-  const fakeUserData = [
-    { username: 'John Doe', avatar_url: 'https://avatars.githubusercontent.com/u/84065711?v=4' },
-    {
-      username: 'Jan Doe',
-      avatar_url: 'https://avatars.githubusercontent.com/u/84065711?v=4',
-    },
-    {
-      username: 'Jeen Doe',
-      avatar_url: 'https://avatars.githubusercontent.com/u/84065711?v=4',
-    },
-  ];
+  }, [id]);
+
+  useEffect(() => {
+    const chatArea = document.querySelector('.chat-area');
+    chatArea.scrollTop = chatArea.scrollHeight;
+  }, [conversations]);
+
+  const inChatSwitch = () => {
+    switch (inChat) {
+      case true:
+        return <InChat peopleInChat={peopleInChat} />;
+      case false:
+        return <FriendsList />;
+      default:
+        return <InChat peopleInChat={peopleInChat} />;
+    }
+  };
+
   return (
     <>
       <Header />
@@ -111,7 +150,12 @@ const Room = () => {
             <button type="submit">Send</button>
           </form>
         </div>
-        <div className="in-chat"></div>
+        <div className="in-chat">
+          <section className="in-chat__header">
+            <button onClick={() => setInChat(true)}>inchat</button> <button onClick={() => setInChat(false)}>friends</button>
+          </section>
+          <section className={inChat ? 'in-chat__in-chat' : 'in-chat__friends-list'}>{inChatSwitch()}</section>
+        </div>
       </div>
       <Footer />
     </>
