@@ -4,14 +4,11 @@ import { Link } from 'react-router-dom';
 import RoomsList from './RoomsList.js';
 import { useEffect, useState } from 'react';
 import Modal from '../../pixel_styles/Pixel_UI/Modal/Modal.jsx';
-import Modal from '../../pixel_styles/Pixel_UI/Modal/Modal.jsx';
-import { acceptFriendRequest, declineFriendRequest } from '../../helpers/friends.js';
 const SideNav = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState('rooms'); // ['rooms', 'chats'
   const USER = useSelector((state) => state.auth);
-  const { notifications, isOpen } = useNotifications();
-
+  const { notifications } = useNotifications();
+  const [isOpen, setIsOpen] = useState(false); // ['rooms', 'chats'
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
