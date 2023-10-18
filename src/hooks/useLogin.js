@@ -45,7 +45,6 @@ const useLogin = () => {
     const session = await supabase.auth.getSession();
     if (!session.data) return;
     const data = await supabase.from('profiles').select('username, avatar_url').eq('id', session.data.session.user.id);
-    console.log(data.data[0].username, 'data');
     dispatch(
       authActions.login({
         id: session.data.session.user.id,
