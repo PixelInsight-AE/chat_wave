@@ -11,7 +11,7 @@ CREATE TABLE friends(
     friend_id uuid REFERENCES profiles(id) ON DELETE CASCADE,
     created_at timestamp with time zone DEFAULT now(),
     status friend_status DEFAULT 'pending'
-
+    UNIQUE(profile_id, friend_id),
     PRIMARY KEY (profile_id, friend_id)
 );
 

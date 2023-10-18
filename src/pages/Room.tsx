@@ -47,7 +47,7 @@ const Room = () => {
     return () => {
       channel.unsubscribe();
     };
-  }, []);
+  }, [id]);
   const fakeUserData = [
     { username: 'John Doe', avatar_url: 'https://avatars.githubusercontent.com/u/84065711?v=4' },
     {

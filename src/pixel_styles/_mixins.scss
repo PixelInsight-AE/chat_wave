@@ -57,13 +57,7 @@
 }
 
 // ? DISPLAY
-@mixin flex(
-  $direction: row,
-  $justify-content: flex-start,
-  $align-items: flex-start,
-  $align-content: stretch,
-  $flex-wrap: nowrap
-) {
+@mixin flex($direction: row, $justify-content: flex-start, $align-items: flex-start, $align-content: stretch, $flex-wrap: nowrap) {
   display: flex;
   flex-direction: $direction;
   justify-content: $justify-content;
@@ -79,15 +73,7 @@
 }
 
 // ! GRID
-@mixin grid(
-  $grid-template-columns: 1fr,
-  $grid-template-rows: 1fr,
-  $grid-gap: 0.75rem,
-  $justify-items: stretch,
-  $align-items: stretch,
-  $justify-content: start,
-  $align-content: start
-) {
+@mixin grid($grid-template-columns: 1fr, $grid-template-rows: 1fr, $grid-gap: 0.75rem, $justify-items: stretch, $align-items: stretch, $justify-content: start, $align-content: start) {
   display: grid;
   grid-template-columns: $grid-template-columns;
   grid-template-rows: $grid-template-rows;
@@ -170,17 +156,7 @@
   margin: $margin;
 }
 
-@mixin button(
-  $bg-color: $color-secondary,
-  $text-color: $color-light,
-  $border-width: 0,
-  $border-color: $bg-color,
-  $border-radius: 0.25rem,
-  $font-size: 1rem,
-  $padding: 0.5rem 1rem,
-  $margin: 0.5rem,
-  $cursor: pointer
-) {
+@mixin button($bg-color: $color-secondary, $text-color: $c-text, $border-width: 0, $border-color: $bg-color, $border-radius: 0.25rem, $font-size: 1rem, $padding: 0.5rem 1rem, $margin: 0.5rem, $cursor: pointer) {
   padding: $padding;
   margin: $margin;
   border: $border-width solid $border-color;
