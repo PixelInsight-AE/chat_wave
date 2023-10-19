@@ -3,31 +3,14 @@ import { useParams } from 'react-router-dom';
 import supabase from '../config/supabase';
 import InChat from '../components/chatroom/InChat';
 import FriendsList from '../components/chatroom/FriendsList';
-const useChatRoom = (id) => {
+import { useSelector } from 'react-redux';
+const useChatRoom = (room_id) => {
+  const userId = useSelector((state) => state.auth.id);
+
   const [room, setRoom] = useState(null);
   const [conversations, setConversations] = useState([]);
   const [error, setError] = useState(null);
-  const [inChat, setInChat] = useState(true);
-
-  const inChatSwitch = () => {
-    switch (inChat) {
-      case true:
-        return <InChat />;
-      case false:
-        return <FriendsList />;
-      default:
-        return <InChat />;
-    }
-  };
-
-  const handleInChatChange = (e) => {
-    if (e.target.id === 'inChat') {
-      setInChat(true);
-    }
-    if (e.target.id === 'friends') {
-      setInChat(false);
-    }
-  };
+  const [peopleInChat, setPeopleInChat] = useState([]);
 
   const formatDateTime = (date) => {
     const d = new Date(date);
@@ -36,32 +19,35 @@ const useChatRoom = (id) => {
   };
 
   const fetchRoom = async () => {
-    const data = await supabase.from('rooms').select('*').eq('id', id);
+    const data = await supabase.from('rooms').select('*, conversations(*),in_chat(*)').eq('id', room_id);
+
     setRoom(data);
   };
+
   const fetchConversations = async () => {
-    const { data, error } = await supabase.from('conversations').select('*, sender:sender_id(*)').eq('room_id', id);
+    const { data, error } = await supabase.from('conversations').select('*, sender:sender_id(*)').eq('room_id', room_id);
     if (error) return setError(error.message);
-    console.log(data);
     setConversations(data);
   };
 
-  useEffect(() => {
-    const channel = supabase
-      .channel(`room:${id}`)
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'conversations' }, (payload) => {
-        console.log(payload);
-        fetchConversations();
-      })
-      .subscribe();
-    fetchRoom();
+  const fetchPeopleInChat = async () => {
+    const { data, error } = await supabase.from('in_chat').select('*, users:profile_id(*)').eq('room_id', room_id);
+    if (error) return setError(error.message);
+    console.table(data);
+    setPeopleInChat(data);
+  };
+  const enterChat = async () => {
+    const { data, error } = await supabase.from('in_chat').insert({
+      profile_id: userId,
+      room_id: room_id,
+    });
+    if (error) return setError(error.message);
+    await fetchPeopleInChat();
+  };
+  const leaveChat = async () => {
+    await supabase.from('in_chat').delete().eq('room_id', room_id).eq('profile_id', userId);
+  };
 
-    fetchConversations();
-    return () => {
-      channel.unsubscribe();
-    };
-  }, [id]);
-
-  return { inChatSwitch, formatDateTime, fetchRoom, room, conversations, error, inChat, setInChat, handleInChatChange };
+  return { formatDateTime, fetchRoom, room, conversations, error, fetchConversations, fetchPeopleInChat, peopleInChat, enterChat, leaveChat };
 };
 export default useChatRoom;

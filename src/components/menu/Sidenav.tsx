@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom';
 import RoomsList from './RoomsList.js';
 import { useEffect, useState } from 'react';
 import Modal from '../../pixel_styles/Pixel_UI/Modal/Modal.jsx';
+
 const SideNav = () => {
   const [selected, setSelected] = useState('rooms'); // ['rooms', 'chats'
   const USER = useSelector((state) => state.auth);
   const { notifications } = useNotifications();
   const [isOpen, setIsOpen] = useState(false); // ['rooms', 'chats'
+
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
