@@ -10,9 +10,16 @@ import Header from './components/shared/Header';
 import CreateRoom from './pages/CreateRoom';
 import Room from './pages/Room';
 import Account from './pages/Account';
-
+import { io } from 'socket.io-client';
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const USER = useSelector((state) => state.auth);
+  const socket = io('http://localhost:3333', {
+    autoConnect: false,
+    query: {
+      id: USER.id,
+    },
+  });
 
   const { checkAuth } = useLogin();
 
