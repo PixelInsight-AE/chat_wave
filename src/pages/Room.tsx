@@ -15,8 +15,7 @@ import { ClientConfig, IAgoraRTCRemoteUser, ICameraVideoTrack, IMicrophoneAudioT
 import { AgoraVideoPlayer, createClient, createMicrophoneAndCameraTracks } from 'agora-rtc-react';
 
 const APP_ID = '446c8e0709df46e38eb760c0b4abac49';
-const TOKEN = '007eJxTYLBxcRBuKAp1uPB2mgD//75ZpuKyVy4L/7r6Nmx7AG8N+0wFBhMTs2SLVANzA8uUNBOzVGOL1CRzM4NkgySTxKTEZBNLoc1GqQ2BjAwCT5NZGRkgEMRnYchNzMxjYAAAxWUdlg==';
-const CHANNEL = 'main';
+
 const config: ClientConfig = { mode: 'rtc', codec: 'vp8' };
 
 const useClient = createClient(config);
