@@ -26,7 +26,7 @@ const useLogin = () => {
       password: password,
     });
     const username = await supabase.from('profiles').select('username').eq('id', data.user.id);
-    console.log(data.user.user_metadata.avatar_url);
+    // console.log(data.user.user_metadata.avatar_url);
     if (error) return setError(error.message);
     dispatch(
       authActions.login({

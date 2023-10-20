@@ -6,22 +6,25 @@ import FriendsList from '../components/chatroom/FriendsList';
 import { useSelector } from 'react-redux';
 const useChatRoom = (room_id) => {
   const userId = useSelector((state) => state.auth.id);
-
-  const [room, setRoom] = useState(null);
+  const [roomToken, setRoomToken] = useState(null);
   const [conversations, setConversations] = useState([]);
   const [error, setError] = useState(null);
   const [peopleInChat, setPeopleInChat] = useState([]);
+
+  const fetchRoomToken = useCallback(async () => {
+    try {
+      const tokenData = await fetch(`http://localhost:3333/rtc/${room_id}/audience/uid/${userId}`);
+      const token = await tokenData.json();
+      setRoomToken(token.rtcToken);
+    } catch {
+      setError('Error getting token');
+    }
+  }, [room_id, userId]);
 
   const formatDateTime = (date) => {
     const d = new Date(date);
     const time = d.toLocaleTimeString('en-US');
     return `${d.toLocaleDateString()} ${time}`;
-  };
-
-  const fetchRoom = async () => {
-    const data = await supabase.from('rooms').select('*, conversations(*),in_chat(*)').eq('id', room_id);
-
-    setRoom(data);
   };
 
   const fetchConversations = async () => {
@@ -33,7 +36,7 @@ const useChatRoom = (room_id) => {
   const fetchPeopleInChat = async () => {
     const { data, error } = await supabase.from('in_chat').select('*, users:profile_id(*)').eq('room_id', room_id);
     if (error) return setError(error.message);
-    console.table(data);
+    // console.table(data);
     setPeopleInChat(data);
   };
   const enterChat = async () => {
@@ -47,7 +50,11 @@ const useChatRoom = (room_id) => {
   const leaveChat = async () => {
     await supabase.from('in_chat').delete().eq('room_id', room_id).eq('profile_id', userId);
   };
+  useEffect(() => {
+    console.log(roomToken);
+  }, [roomToken]);
+  fetchRoomToken();
 
-  return { formatDateTime, fetchRoom, room, conversations, error, fetchConversations, fetchPeopleInChat, peopleInChat, enterChat, leaveChat };
+  return { formatDateTime, conversations, error, fetchConversations, fetchPeopleInChat, peopleInChat, enterChat, leaveChat, roomToken };
 };
 export default useChatRoom;

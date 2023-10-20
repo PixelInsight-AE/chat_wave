@@ -44,8 +44,8 @@ const RoomsList = ({ selected }) => {
   return (
     <ul className="room-map">
       {rooms.map((room) => (
-        <Link to={`/room/${room.id}`} className="room-map__room--link">
-          <li className="room-map__room" key={room.id}>
+        <Link key={room.id} to={`/room/${room.id}`} className="room-map__room--link">
+          <li className="room-map__room">
             <img src={room.room_img} alt="" />
             <h3 className="room-map__room--name">{room.name}</h3>
             <p className="room-map__room--capacity">{`${room.capacity}/30`}</p>

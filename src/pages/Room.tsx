@@ -10,35 +10,17 @@ import FriendsList from '../components/chatroom/FriendsList.js';
 import useChatRoom from '../hooks/useChatRoom.js';
 import { useSelector } from 'react-redux';
 import AgoraRTC from 'agora-rtc-sdk-ng';
-
 import { ClientConfig, IAgoraRTCRemoteUser, ICameraVideoTrack, IMicrophoneAudioTrack } from 'agora-rtc-sdk-ng';
 
 import { AgoraVideoPlayer, createClient, createMicrophoneAndCameraTracks } from 'agora-rtc-react';
 
 const APP_ID = '446c8e0709df46e38eb760c0b4abac49';
-const TOKEN = '007eJxTYHD+w2Y1OWNJUP8+p8NfJ86a9v/wsfJ1G9uefLtzmz02IGOKAoOJiVmyRaqBuYFlSpqJWaqxRWqSuZlBskGSSWJSYrKJ5Sojw9SGQEYGhp91jIwMEAjiszDkJmbmMTAAAC0TIgw=';
+const TOKEN = '007eJxTYLBxcRBuKAp1uPB2mgD//75ZpuKyVy4L/7r6Nmx7AG8N+0wFBhMTs2SLVANzA8uUNBOzVGOL1CRzM4NkgySTxKTEZBNLoc1GqQ2BjAwCT5NZGRkgEMRnYchNzMxjYAAAxWUdlg==';
 const CHANNEL = 'main';
 const config: ClientConfig = { mode: 'rtc', codec: 'vp8' };
 
 const useClient = createClient(config);
 const useMicrophoneAndCameraTracks = createMicrophoneAndCameraTracks();
-
-const ChannelForm = ({ setInCall, setChannelName }) => {
-  return (
-    <form className="join">
-      {APP_ID === '' && <p style={{ color: 'red' }}>Please enter your Agora App ID in App.tsx and refresh the page</p>}
-      <input type="text" placeholder="Enter Channel Name" onChange={(e) => setChannelName(e.target.value)} />
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          setInCall(true);
-        }}
-      >
-        Join
-      </button>
-    </form>
-  );
-};
 
 const Controls = ({ tracks, setStart, setInCall }) => {
   const client = useClient();
@@ -95,7 +77,7 @@ const Videos = ({ users, tracks }) => {
   );
 };
 
-const VideoCall = ({ setInCall, channelName }) => {
+const VideoCall = ({ setInCall, roomName, roomToken }) => {
   const [users, setUsers] = useState<IAgoraRTCRemoteUser[]>([]);
   const [start, setStart] = useState<boolean>(false);
   const client = useClient();
@@ -103,7 +85,7 @@ const VideoCall = ({ setInCall, channelName }) => {
 
   useEffect(() => {
     // function to initialise the SDK
-    let init = async (name: string) => {
+    let init = async (roomName) => {
       client.on('user-published', async (user, mediaType) => {
         await client.subscribe(user, mediaType);
         console.log('subscribe success');
@@ -136,16 +118,16 @@ const VideoCall = ({ setInCall, channelName }) => {
         });
       });
 
-      await client.join(APP_ID, name, TOKEN, null);
+      await client.join(APP_ID, roomName, roomToken, null);
       if (tracks) await client.publish([tracks[0], tracks[1]]);
       setStart(true);
     };
 
     if (ready && tracks) {
       console.log('init ready');
-      init(channelName);
+      init(roomName);
     }
-  }, [channelName, client, ready, tracks]);
+  }, [roomName, client, ready, tracks]);
 
   return (
     <div>
@@ -157,21 +139,37 @@ const VideoCall = ({ setInCall, channelName }) => {
 
 const Room = () => {
   const { id } = useParams();
-
-  const { room, peopleInChat, fetchRoom, enterChat, leaveChat, fetchConversations, fetchPeopleInChat, conversations, formatDateTime } = useChatRoom(id);
+  const userId = useSelector((state) => state.auth.id);
+  const { peopleInChat, enterChat, leaveChat, fetchConversations, fetchPeopleInChat, conversations, formatDateTime, roomToken } = useChatRoom(id);
   const { message, handleInput, sendMessage } = useConverse(id);
 
   const [inCall, setInCall] = useState(false);
-  const [channelName, setChannelName] = useState('');
   const [inChat, setInChat] = useState(true);
+  const [roomName, setRoomName] = useState('');
+  const [room, setRoom] = useState(null);
 
   useEffect(() => {
+    const fetchRoom = async () => {
+      const data = await supabase.from('rooms').select('*, conversations(*),in_chat(*)').eq('id', id);
+      setRoom(data);
+      setRoomName(data.data[0].name);
+    };
     fetchRoom();
     fetchConversations();
     enterChat();
+  }, [id]);
+
+  useEffect(() => {
     const channel = supabase.channel(`room:${id}`).on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'conversations' }, fetchConversations).on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'in_chat' }, fetchPeopleInChat).on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'in_chat' }, fetchPeopleInChat).subscribe();
 
+    const handleUnload = () => {
+      setInCall(false);
+      leaveChat();
+      channel.unsubscribe();
+    };
+    window.addEventListener('beforeunload', handleUnload);
     return () => {
+      window.removeEventListener('beforeunload', handleUnload);
       leaveChat();
       channel.unsubscribe();
     };
@@ -203,17 +201,43 @@ const Room = () => {
             <section className="chat-room__header--bookmark">
               <img src="/assets/svg/bookmark.svg" alt="" />
 
-              <h1 className="chat-room__header--name">{room && room.data[0].name}</h1>
+              <h1 className="chat-room__header--name">{roomName}</h1>
             </section>
             <p className="chat-room__header--capacity">{room && room.data[0].capacity}/30</p>
           </section>
 
-          <div style={{ height: '50vh' }}>{inCall ? <VideoCall setInCall={setInCall} channelName={channelName} /> : <ChannelForm setInCall={setInCall} setChannelName={setChannelName} />};</div>
+          <div style={{ height: '50vh' }}>
+            {inCall ? (
+              <VideoCall setInCall={setInCall} roomName={roomName} roomToken={roomToken} />
+            ) : (
+              <h2
+                style={{
+                  position: 'absolute',
+                  top: '30%',
+                  left: '30%',
+                  color: '#7ad7ff',
+                  fontSize: '3rem',
+                }}
+              >
+                Join To See others Video!
+              </h2>
+            )}
+          </div>
+          {inCall ? null : (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setInCall(true);
+              }}
+            >
+              Join Video
+            </button>
+          )}
           <ul className="chat-area">
             {conversations ? (
-              conversations.map((conversation) => {
+              conversations.map((conversation, i) => {
                 return (
-                  <li className="chat-area__message">
+                  <li key={i} className="chat-area__message">
                     <section className="chat-area__message--wrapper">
                       <img
                         style={{

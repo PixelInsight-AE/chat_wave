@@ -61,7 +61,7 @@ const useCreateRoom = () => {
       picture: publicUrl,
     });
     if (error) return setError(error.message);
-    console.log(data);
+    // console.log(data);
     navigate('/');
     alert('Room Created');
   };
@@ -76,7 +76,7 @@ const useCreateRoom = () => {
     }
   }, [roomImg]);
   useEffect(() => {
-    console.log(roomImg);
+    // console.log(roomImg);
   }, [roomImg]);
   return { error, loading, handleFileInput, handleInput, handleAddInvite, createRoom, roomName, roomType, roomDescription, toInvite, fileInputRef, handleImageClick, roomImg, roomImgUrl, roomCapacity };
 };

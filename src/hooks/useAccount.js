@@ -15,7 +15,7 @@ const useAccount = () => {
   const [password, setPassword] = useState(null);
 
   const dispatch = useDispatch();
-  console.log(USER);
+  // console.log(USER);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
