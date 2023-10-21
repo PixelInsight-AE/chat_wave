@@ -5,9 +5,9 @@ import useCreateRoom from '../hooks/useCreateRoom';
 import { useEffect } from 'react';
 const Create = () => {
   const { roomImgUrl, roomImg, fileInputRef, handleImageClick, handleFileInput, handleInput, roomName, roomType, loading, error, roomDescription, roomCapacity, createRoom } = useCreateRoom();
-  useEffect(() => {
-    console.log(roomName, roomType, roomDescription, roomCapacity);
-  }, [roomName, roomType, roomDescription, roomCapacity]);
+  // useEffect(() => {
+  //   console.log(roomName, roomType, roomDescription, roomCapacity);
+  // }, [roomName, roomType, roomDescription, roomCapacity]);
   return (
     <div className="create">
       <section className="create__main">

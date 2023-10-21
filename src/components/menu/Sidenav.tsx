@@ -43,10 +43,10 @@ const SideNav = () => {
             {notifications &&
               notifications.map((notification) => {
                 const { owner, room_name, room_img, friend_avatar, friend_username } = notification.notification;
-                console.log(notification, 'notification');
+                // console.log(notification, 'notification');
                 if (notification.notification_type === 'room_invite') {
                   return (
-                    <div className="notification-menu__notification">
+                    <div key={room_name} className="notification-menu__notification">
                       <section>
                         <img src={room_img} alt="" />
                         <h3>{room_name}</h3>
@@ -77,10 +77,10 @@ const SideNav = () => {
             {notifications &&
               notifications.map((notification) => {
                 const { owner, room_name, room_img, friend_avatar, friend_username } = notification.notification;
-                console.log(notification, 'notification');
+                // console.log(notification, 'notification');
                 if (notification.notification_type === 'room_invite') {
                   return (
-                    <div className="notification-menu__notification">
+                    <div key={notification.id} className="notification-menu__notification">
                       <section>
                         <img src={room_img} alt="" />
                         <h3>{room_name}</h3>
